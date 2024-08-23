@@ -30,7 +30,7 @@ jobs:
   
       - name: Generate config.js
         run: |
-          echo "MY_ENV_VARIABLE='${{ secrets.API_KEY }}'" > ./config.js
+          echo "API_KEY='${{ secrets.API_KEY }}'" > ./config.js
   
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
