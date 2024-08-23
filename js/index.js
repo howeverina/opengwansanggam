@@ -296,6 +296,7 @@ async function loginForEditing(title, length, output) {
 async function renderContent(title) {
 
     let response;
+    let response_err
     try {
         response = await gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
@@ -303,7 +304,7 @@ async function renderContent(title) {
         });
     } catch (err) {
         try {
-            var response_err = await gapi.client.sheets.spreadsheets.values.get({
+            response_err = await gapi.client.sheets.spreadsheets.values.get({
                 spreadsheetId: SPREADSHEET_ID,
                 range: '대문!A2:C',
             });
@@ -324,6 +325,7 @@ async function renderContent(title) {
             }
             return;
         }
+        return;
     }
     const range = response.result;
     if (!range || !range.values || range.values.length == 0) {
