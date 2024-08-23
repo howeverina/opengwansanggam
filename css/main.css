@@ -2,3 +2,12 @@
     display: flex;
     gap: 12px;
 }
+
+#navbar a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#logo {
+    font-weight: 700;
+}
