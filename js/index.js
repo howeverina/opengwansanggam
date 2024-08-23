@@ -250,17 +250,17 @@ async function listMajors(title) {
         range: title+'!A2:C',
         });
     } catch (err) {
-        if (gapi.client.getToken()) {
-            location.href='./?ed='+title
+        // if (gapi.client.getToken()) {
+        //     location.href='./?ed='+title
 
-            console.log('생성 화면')
+        //     console.log('생성 화면')
 
-            document.getElementById('doc-title').innerHTML = title+' 생성';
-            document.getElementById('content').innerHTML = `<div id="post-label"><button id="post-button" onclick="postDocs('${title}')">문서 생성!</button>`;
-        } else {
+        //     document.getElementById('doc-title').innerHTML = title+' 생성';
+        //     document.getElementById('content').innerHTML = `<div id="post-label"><button id="post-button" onclick="postDocs('${title}')">문서 생성!</button>`;
+        // } else {
             document.getElementById('content').innerText = '문서 생성 권한이 없습니다.';
             return;
-        }
+        // }
     }
     const range = response.result;
     if (!range || !range.values || range.values.length == 0) {
