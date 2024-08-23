@@ -61,7 +61,7 @@ async function wikiParse(text) {
                 content = content.replace(/href\=\"([^\"\:]+)\"\>([^\<]+)\</gm, 'href="./?d=$1">$2<')
                 content = content.replace(/href\=\"\"\>([^\<]+)\</gm, 'href="./?d=$1">$1<')
                 // responseArray.push(content)
-                markdown.replace('<img src="" alt="'+including+'">', content)
+                markdown = markdown.replace('<img src="" alt="'+including+'">', content)
                 console.log(markdown)
             } catch (err) {
                 console.log(err)
