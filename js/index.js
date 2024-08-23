@@ -181,6 +181,31 @@ function handleSignoutClick() {
     }
 }
 
+
+function postDocs(title) {
+    const body = {
+        "requests":{
+            "addSheet":{
+                "properties":{
+                    "title": title
+                }
+            }
+        }
+    }
+
+    try {
+      gapi.client.sheets.spreadsheets.batchUpdate({
+        spreadsheetId: SPREADSHEET_ID,
+        resource: body,
+      }).then((response) => {
+        location.href="./?d="+title
+      });
+    } catch (err) {
+      document.getElementById('content').innerText += err.message;
+      return;
+    }
+}
+
 function editDocs(range, title, input) {
     input = input.replace(/\n/gm, '\\n')
     let values = [
@@ -222,8 +247,17 @@ async function listMajors(title) {
         range: title+'!A2:C',
         });
     } catch (err) {
-        document.getElementById('content').innerText = err.message;
-        return;
+        if (gapi.client.getToken()) {
+            location.href='./?ed='+title
+
+            console.log('생성 화면')
+
+            document.getElementById('doc-title').innerHTML = title+' 생성';
+            document.getElementById('content').innerHTML = `<div id="post-label"><button id="post-button" onclick="postDocs('${title}')">문서 생성!</button>`;
+        } else {
+            document.getElementById('content').innerText = '문서 생성 권한이 없습니다.';
+            return;
+        }
     }
     const range = response.result;
     if (!range || !range.values || range.values.length == 0) {
