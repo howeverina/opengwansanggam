@@ -247,18 +247,18 @@ async function renderContent(title) {
                 token = localStorage.getItem('googleToken');
                 if (token) {
                     gapi.client.setToken(JSON.parse(token))
-                    document.querySelector('#isLogin').innerHTML = '로그인됨'
+                    document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice"></i>'
                     document.getElementById('signout_button').style.visibility = 'visible';
                     document.getElementById('authorize_button').innerText = '새로고침';
                 }
             } else {
-                document.querySelector('#isLogin').innerHTML = '로그아웃됨'
+                document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-x" ></i>'
                 document.getElementById('authorize_button').innerText = '로그인';
                 document.getElementById('edit_button').style.visibility = 'hidden';
                 document.getElementById('signout_button').style.visibility = 'hidden';
             }
         } else {
-            document.querySelector('#isLogin').innerHTML = '로그인됨'
+            document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice"></i>'
             document.getElementById('signout_button').style.visibility = 'visible';
             document.getElementById('authorize_button').innerText = '새로고침';
         }
@@ -267,7 +267,7 @@ async function renderContent(title) {
             token = localStorage.getItem('googleToken');
             if (token) {
                 gapi.client.setToken(JSON.parse(token))
-                    document.querySelector('#isLogin').innerHTML = '로그인됨'
+                    document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice"></i>'
                     document.getElementById('signout_button').style.visibility = 'visible';
                     document.getElementById('authorize_button').innerText = '새로고침';
             }
