@@ -115,24 +115,27 @@ if (docs && !page && !edit) {
        */
     function handleAuthClick() {
         tokenClient.callback = async (resp) => {
-          if (resp.error !== undefined) {
-            throw (resp);
-          }
-          document.getElementById('signout_button').style.visibility = 'visible';
-          document.getElementById('authorize_button').innerText = '새로고침';
-          await listMajors(docs);
+            if (resp.error !== undefined) {
+                throw (resp);
+            }
+            document.getElementById('signout_button').style.visibility = 'visible';
+            document.getElementById('authorize_button').innerText = '새로고침';
+
+            var token = gapi.client.getToken()
+            localStorage.setItem('googleToken', token)
+
+            await listMajors(docs);
         };
 
-        var token = gapi.client.getToken()
-
-        if ( token === null) {
+        if ( gapi.client.getToken() === null) {
           // Prompt the user to select a Google Account and ask for consent to share their data
           // when establishing a new session.
-          tokenClient.requestAccessToken({prompt: 'consent'});
+            tokenClient.requestAccessToken({prompt: 'consent'});
+            var token = gapi.client.getToken()
+            localStorage.setItem('googleToken', token)
         } else {
-          // Skip display of account chooser and consent dialog for an existing session.
-          tokenClient.requestAccessToken({prompt: ''});
-          localStorage.setItem('googleToken', token)
+            // Skip display of account chooser and consent dialog for an existing session.
+            tokenClient.requestAccessToken({prompt: ''});
         }
     }
 
@@ -149,7 +152,6 @@ if (docs && !page && !edit) {
             localStorage.removeItem('googleToken')
             google.accounts.oauth2.revoke(token.access_token);
             gapi.client.setToken('');
-            document.getElementById('content').innerText = '';
             document.getElementById('authorize_button').innerText = '로그인';
             document.getElementById('signout_button').style.visibility = 'hidden';
         }
