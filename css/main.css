@@ -34,6 +34,11 @@ i {
     font-size: 1.6rem;
 }
 
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
 button {
     border-radius: 10px;
     border: 0;
