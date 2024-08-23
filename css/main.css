@@ -27,6 +27,22 @@ input {
     border: 0;
 }
 
+i {
+    font-size: 1.6rem;
+}
+
+button {
+    border-radius: 10px;
+    border: 0;
+    background-color: var(--accent);
+    color: white;
+}
+
+textarea {
+    height: 400px;
+    resize: none;
+}
+
 #navbar {
     width: calc(100vw - 2em);
     display: flex;
