@@ -247,14 +247,20 @@ async function renderContent(title) {
                 token = localStorage.getItem('googleToken');
                 if (token) {
                     gapi.client.setToken(JSON.parse(token))
+                    document.querySelector('#isLogin').innerHTML = '로그인됨'
                 }
+            } else {
+                document.querySelector('#isLogin').innerHTML = '로그아웃됨'
             }
+        } else {
+            document.querySelector('#isLogin').innerHTML = '로그인됨'
         }
     } else {
         if (localStorage.getItem('googleToken')) {
             token = localStorage.getItem('googleToken');
             if (token) {
                 gapi.client.setToken(JSON.parse(token))
+                    document.querySelector('#isLogin').innerHTML = '로그인됨'
             }
         }
     }
