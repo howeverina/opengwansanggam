@@ -69,7 +69,7 @@ function wikiParse(text) {
         });
         gapiInited = true;
         maybeEnableButtons();
-        listMajors(document)
+        listMajors(docs)
       }
 
       /**
@@ -105,7 +105,7 @@ function wikiParse(text) {
           }
           document.getElementById('signout_button').style.visibility = 'visible';
           document.getElementById('authorize_button').innerText = 'Refresh';
-          await listMajors(document);
+          await listMajors(docs);
         };
 
         if (gapi.client.getToken() === null) {
