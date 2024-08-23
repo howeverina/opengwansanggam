@@ -181,7 +181,7 @@ function editDocs(range, title, input) {
       values: values,
     };
     try {
-      gapi.client.sheets.spreadsheets.values.update({
+      gapi.client.sheets.spreadsheets.values.append({
         spreadsheetId: SPREADSHEET_ID,
         range: title,
         valueInputOption: "RAW",
