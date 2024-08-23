@@ -172,7 +172,7 @@ function handleSignoutClick() {
 function edit(range, title, input) {
     let values = [
       [
-        range.values.length,
+        range,
         new Date(),
         input
       ]
@@ -237,6 +237,6 @@ async function listMajors(title) {
         console.log('edit 화면')
 
         document.getElementById('doc-title').innerHTML = title+' 편집';
-        document.getElementById('content').innerHTML = '<div id="post-label">'+edit+' 편집: <span id="wordcount"></span></div><textarea id="post-input" oninput="changePostDisabled(this)">'+output+`</textarea><button id="post-button" disabled="true" onclick="edit(${range},${edit},document.querySelector('#post-input').value)">편집 완료!</button>`;
+        document.getElementById('content').innerHTML = '<div id="post-label">'+edit+' 편집: <span id="wordcount"></span></div><textarea id="post-input" oninput="changePostDisabled(this)">'+output+`</textarea><button id="post-button" disabled="true" onclick="edit(${JSON.stringify(range.values.length)},${edit},document.querySelector('#post-input').value)">편집 완료!</button>`;
     }
 }
