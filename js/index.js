@@ -45,7 +45,6 @@ async function wikiParse(text) {
     markdown = markdown.replace(/href\=\"\"\>([^\<]+)\</gm, 'href="./?d=$1">$1<')
     if (markdown.includes('<img src="" alt="')) {
         let includeArray = markdown.split('<img src="" alt="').slice(1)
-        console.log(includeArray)
         // let responseArray;
         for await (including of includeArray) {
             including = including.split('">')[0]
@@ -62,14 +61,12 @@ async function wikiParse(text) {
                 content = content.replace(/href\=\"\"\>([^\<]+)\</gm, 'href="./?d=$1">$1<')
                 // responseArray.push(content)
                 markdown = markdown.replace('<img src="" alt="'+including+'">', content)
-                console.log(markdown)
             } catch (err) {
                 console.log(err)
             }
         }
         return markdown
     } else {
-        console.log(markdown)
         return markdown
     }
 }
@@ -111,8 +108,8 @@ const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4'
     let gapiInited = false;
     let gisInited = false;
 
-    document.getElementById('authorize_button').style.display = 'none';
-    document.getElementById('signout_button').style.display = 'none';
+    // document.getElementById('authorize_button').style.display = 'none';
+    // document.getElementById('signout_button').style.display = 'none';
 
     /**
      * Callback after api.js is loaded.
@@ -137,7 +134,7 @@ async function initializeGapiClient() {
 
     gapiInited = true;
 
-    maybeEnableButtons();
+    //maybeEnableButtons();
     renderContent(title)
 }
 
@@ -151,8 +148,9 @@ function gisLoaded() {
         scope: SCOPES,
         callback: 'https://wiki.rongo.moe/', // defined later
     });
+    
     gisInited = true;
-    maybeEnableButtons();
+    //maybeEnableButtons();
 
 }
 
@@ -162,12 +160,12 @@ function handleEditClick() {
     /**
      * Enables user interaction after all libraries are loaded.
      */
-function maybeEnableButtons() {
+// function maybeEnableButtons() {
 
-    if (gapiInited && gisInited) {
-        document.getElementById('authorize_button').style.display = 'inline';
-    }
-}
+//     if (gapiInited && gisInited) {
+//         document.getElementById('authorize_button').style.display = 'inline';
+//     }
+// }
 
     /**
      *  Sign in the user upon button click.
@@ -178,9 +176,9 @@ function handleAuthClick() {
         if (resp.error !== undefined) {
             throw (resp);
         }
-        document.getElementById('edit_button').style.display = 'inline';
-        document.getElementById('signout_button').style.display = 'inline';
-        document.getElementById('authorize_button').innerText = '새로고침';
+        // document.getElementById('edit_button').style.display = 'inline';
+        // document.getElementById('signout_button').style.display = 'inline';
+        // document.getElementById('authorize_button').innerText = '새로고침';
 
         var token = JSON.stringify(gapi.client.getToken())
         localStorage.setItem('googleToken', token)
@@ -214,9 +212,9 @@ function handleSignoutClick() {
         localStorage.removeItem('googleToken')
         google.accounts.oauth2.revoke(token.access_token);
         gapi.client.setToken('');
-        document.getElementById('authorize_button').innerText = '로그인';
-        document.getElementById('edit_button').style.display = 'none';
-        document.getElementById('signout_button').style.display = 'none';
+        // document.getElementById('authorize_button').innerText = '로그인';
+        // document.getElementById('edit_button').style.display = 'none';
+        // document.getElementById('signout_button').style.display = 'none';
     }
 }
 
@@ -273,47 +271,7 @@ function editDocs(range, title, input) {
     }
   }
 
-    /**
-     * Print the names and majors of students in a sample spreadsheet:
-     * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-     */
 async function renderContent(title) {
-    var token
-    if (gapi.client) {
-        if (gapi.client.getToken() == null) {
-            if (localStorage.getItem('googleToken')) {
-                token = localStorage.getItem('googleToken');
-                if (token) {
-                    gapi.client.setToken(JSON.parse(token))
-                    document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice"></i>'
-                    document.getElementById('signout_button').style.display = 'inline';
-                    document.getElementById('edit_button').style.display = 'inline';
-                    document.getElementById('authorize_button').innerText = '새로고침';
-                }
-            } else {
-                document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-x" ></i>'
-                document.getElementById('authorize_button').innerText = '로그인';
-                document.getElementById('edit_button').style.display = 'none';
-                document.getElementById('signout_button').style.display = 'none';
-            }
-        } else {
-            document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice"></i>'
-            document.getElementById('signout_button').style.display = 'inline';
-            document.getElementById('edit_button').style.display = 'inline';
-            document.getElementById('authorize_button').innerText = '새로고침';
-        }
-    } else {
-        if (localStorage.getItem('googleToken')) {
-            token = localStorage.getItem('googleToken');
-            if (token) {
-                gapi.client.setToken(JSON.parse(token))
-                    document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice"></i>'
-                    document.getElementById('edit_button').style.display = 'inline';
-                    document.getElementById('signout_button').style.display = 'inline';
-                    document.getElementById('authorize_button').innerText = '새로고침';
-            }
-        }
-    }
 
     let response;
     try {
@@ -323,34 +281,63 @@ async function renderContent(title) {
         range: title+'!A2:C',
         });
     } catch (err) {
-        // if (gapi.client.getToken()) {
-        //     location.href='./?ed='+title
-
-        //     console.log('생성 화면')
-
-        //     document.getElementById('doc-title').innerHTML = title+' 생성';
-        //     document.getElementById('content').innerHTML = `<div id="post-label"><button id="post-button" onclick="postDocs('${title}')">문서 생성!</button>`;
-        // } else {
-            document.getElementById('content').innerText = '문서 생성 권한이 없습니다.';
-            if (localStorage.getItem('googleToken')) {
-                localStorage.removeItem('googleToken')
-                location.href='./?d='+title
-            }
-            return;
-        // }
+        document.getElementById('content').innerText = '문서 생성 권한이 없습니다.';
+        if (localStorage.getItem('googleToken')) {
+            localStorage.removeItem('googleToken')
+            location.href='./?d='+title
+        }
+        return;
     }
     const range = response.result;
     if (!range || !range.values || range.values.length == 0) {
         document.getElementById('content').innerText = 'No values found.';
         return;
     }
-    // Flatten to string to display
+    
     const output = range.values[range.values.length - 1][2]
-    //const output = range.values.reduce(
-        // (str, row) => `${str}${row[0]}, ${row[2]}\n`,
-        // 'Name, Major:\n');
     document.getElementById('doc-title').innerHTML = title;
     document.getElementById('content').innerHTML = await wikiParse(output);
+
+    loginForEditing(title)
+}
+
+async function loginForEditing(title) {
+    var token
+    if (gapi.client) {
+        if (gapi.client.getToken() == null) {
+            if (localStorage.getItem('googleToken')) {
+                token = localStorage.getItem('googleToken');
+                if (token) {
+                    gapi.client.setToken(JSON.parse(token))
+                    document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice" onclick="handleSignoutClick()" ></i>'
+                    // document.getElementById('signout_button').style.display = 'inline';
+                    document.getElementById('edit_button').style.display = 'inline';
+                    // document.getElementById('authorize_button').innerText = '새로고침';
+                }
+            } else {
+                document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-x" onclick="handleAuthClick()" ></i>'
+                // document.getElementById('authorize_button').innerText = '로그인';
+                document.getElementById('edit_button').style.display = 'none';
+                // document.getElementById('signout_button').style.display = 'none';
+            }
+        } else {
+            document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice" onclick="handleSignoutClick()" ></i>'
+            // document.getElementById('signout_button').style.display = 'inline';
+            document.getElementById('edit_button').style.display = 'inline';
+            // document.getElementById('authorize_button').innerText = '새로고침';
+        }
+    } else {
+        if (localStorage.getItem('googleToken')) {
+            token = localStorage.getItem('googleToken');
+            if (token) {
+                gapi.client.setToken(JSON.parse(token))
+                    document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice" onclick="handleSignoutClick()" ></i>'
+                    // document.getElementById('edit_button').style.display = 'inline';
+                    document.getElementById('signout_button').style.display = 'inline';
+                    // document.getElementById('authorize_button').innerText = '새로고침';
+            }
+        }
+    }
 
     if (edit) {
 
