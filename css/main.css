@@ -39,6 +39,8 @@ button {
     border: 0;
     background-color: var(--accent);
     color: white;
+    padding: 5px;
+    font-family: 'NanumSquareNeo';
 }
 
 textarea {
