@@ -37,12 +37,35 @@ document.querySelector('#search-input').addEventListener("input", (e) => {
     document.querySelector('#search-button').href= "./?d="+document.querySelector('#search-input').value
 })
 
-function wikiParse(text) {
+async function wikiParse(text) {
     text = text.replace(/\\n\\n/gm, '\n\n')
     text = text.replace(/\\n/gm, '\n')
     var markdown = marked.parse(text)
     markdown = markdown.replace(/href\=\"([^\"\:]+)\"\>([^\<]+)\</gm, 'href="./?d=$1">$2<')
     markdown = markdown.replace(/href\=\"\"\>([^\<]+)\</gm, 'href="./?d=$1">$1<')
+    if (markdown.includes('img src alt="')) {
+        let includeArray = markdown.split('img src alt="').slice(1)
+        // let responseArray;
+        for await (including of includeArray) {
+            including = including.split('">')[0]
+            try {
+                response = await gapi.client.sheets.spreadsheets.values.get({
+                spreadsheetId: SPREADSHEET_ID,
+                range: including+'!A2:C',
+                });
+                var content = response.result.values[response.result.values.length-1][2]
+                content = content.replace(/\\n\\n/gm, '\n\n')
+                content = content.replace(/\\n/gm, '\n')
+                content = marked.parse(content)
+                content = content.replace(/href\=\"([^\"\:]+)\"\>([^\<]+)\</gm, 'href="./?d=$1">$2<')
+                content = content.replace(/href\=\"\"\>([^\<]+)\</gm, 'href="./?d=$1">$1<')
+                // responseArray.push(content)
+                markdown.replace(including, content)
+            } catch (err) {
+                console.log(err)
+            }
+        }
+    }
     return markdown
 }
 
@@ -83,8 +106,6 @@ function gapiLoaded() {
     gapi.load('client', initializeGapiClient);
 
 }
-
-
 
     /**
      * Callback after the API client is loaded. Loads the
