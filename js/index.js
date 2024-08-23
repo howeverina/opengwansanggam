@@ -74,8 +74,8 @@ const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4'
     let gapiInited = false;
     let gisInited = false;
 
-    document.getElementById('authorize_button').style.visibility = 'hidden';
-    document.getElementById('signout_button').style.visibility = 'hidden';
+    document.getElementById('authorize_button').style.display = 'none';
+    document.getElementById('signout_button').style.display = 'none';
 
     /**
      * Callback after api.js is loaded.
@@ -127,7 +127,7 @@ function handleEditClick() {
 function maybeEnableButtons() {
 
     if (gapiInited && gisInited) {
-        document.getElementById('authorize_button').style.visibility = 'visible';
+        document.getElementById('authorize_button').style.display = 'inline';
     }
 }
 
@@ -141,8 +141,8 @@ function handleAuthClick() {
         if (resp.error !== undefined) {
             throw (resp);
         }
-        document.getElementById('edit_button').style.visibility = 'visible';
-        document.getElementById('signout_button').style.visibility = 'visible';
+        document.getElementById('edit_button').style.display = 'inline';
+        document.getElementById('signout_button').style.display = 'inline';
         document.getElementById('authorize_button').innerText = '새로고침';
 
         var token = JSON.stringify(gapi.client.getToken())
@@ -178,8 +178,8 @@ function handleSignoutClick() {
         google.accounts.oauth2.revoke(token.access_token);
         gapi.client.setToken('');
         document.getElementById('authorize_button').innerText = '로그인';
-        document.getElementById('edit_button').style.visibility = 'hidden';
-        document.getElementById('signout_button').style.visibility = 'hidden';
+        document.getElementById('edit_button').style.display = 'none';
+        document.getElementById('signout_button').style.display = 'none';
     }
 }
 
@@ -248,18 +248,18 @@ async function renderContent(title) {
                 if (token) {
                     gapi.client.setToken(JSON.parse(token))
                     document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice"></i>'
-                    document.getElementById('signout_button').style.visibility = 'visible';
+                    document.getElementById('signout_button').style.display = 'inline';
                     document.getElementById('authorize_button').innerText = '새로고침';
                 }
             } else {
                 document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-x" ></i>'
                 document.getElementById('authorize_button').innerText = '로그인';
-                document.getElementById('edit_button').style.visibility = 'hidden';
-                document.getElementById('signout_button').style.visibility = 'hidden';
+                document.getElementById('edit_button').style.display = 'none';
+                document.getElementById('signout_button').style.display = 'none';
             }
         } else {
             document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice"></i>'
-            document.getElementById('signout_button').style.visibility = 'visible';
+            document.getElementById('signout_button').style.display = 'inline';
             document.getElementById('authorize_button').innerText = '새로고침';
         }
     } else {
@@ -268,7 +268,7 @@ async function renderContent(title) {
             if (token) {
                 gapi.client.setToken(JSON.parse(token))
                     document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice"></i>'
-                    document.getElementById('signout_button').style.visibility = 'visible';
+                    document.getElementById('signout_button').style.display = 'inline';
                     document.getElementById('authorize_button').innerText = '새로고침';
             }
         }
