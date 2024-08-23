@@ -1,4 +1,4 @@
-//const SECRET2 = 'y4hyRoJ'
+const SECRET2 = 'y4hyRoJ'
 
 function getQueryStringObject() {
     var a = window.location.search.substr(1).split('&');
@@ -37,7 +37,7 @@ if (!docs && !edit) {
     title = edit
 }
 document.querySelector('#logo').innerHTML = WIKI_TITLE
-//const SECRET3 = 'Jkjn4rM'
+const SECRET3 = 'Jkjn4rM'
 
 document.querySelector('#search-button').href = './'
 document.querySelector('#search-input').addEventListener("input", (e) => {
@@ -90,7 +90,7 @@ function gapiLoaded() {
      */
 async function initializeGapiClient() {
     // TODO(developer): Set to client ID and API key from the Developer Console
-    //const API_KEY = SECRET1 + '-' + SECRET2 + '_' + SECRET3;
+    const API_KEY = SECRET1 + '-' + SECRET2 + '_' + SECRET3;
 
     await gapi.client.init({
         apiKey: API_KEY,
