@@ -208,6 +208,7 @@ function postDocs(title) {
 }
 
 function editDocs(range, title, input) {
+    beforeUnloadAlert = false;
     input = input.replace(/\n/gm, '\\n')
     let values = [
       [
