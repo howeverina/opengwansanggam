@@ -114,6 +114,16 @@ function gisLoaded() {
     });
     gisInited = true;
     maybeEnableButtons();
+
+    var token
+    if (gapi.client.getToken() == null) {
+        if (localStorage.getItem('googleToken')) {
+            token = localStorage.getItem('googleToken');
+            if (token) {
+                gapi.client.setToken(JSON.parse(token))
+            }
+        }
+    }
 }
 
 function handleEditClick() {
@@ -237,11 +247,6 @@ function editDocs(range, title, input) {
      */
 async function listMajors(title) {
 
-    var token = localStorage.getItem('googleToken');
-    if (token) {
-        gapi.client.setToken(JSON.parse(token))
-    }
-    
     let response;
     try {
         // Fetch first 10 files
