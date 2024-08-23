@@ -22,6 +22,11 @@ if (docs == '') {
     docs = '시트1'
 }
 
+document.querySelector('#search-button').href = './'
+document.querySelector('#search-input').addEventListener("input", (e) => {
+    document.querySelector('#search-button').href= "./?d="+document.querySelector('#search-input').value
+})
+
 function wikiParse(text) {
     text = text.replace(/\n/gm, '')
     text = text.replace(/\[\[(.+)\]\]/gm, '[$1](./?d=$1)')
@@ -46,7 +51,7 @@ function wikiParse(text) {
 
       // Authorization scopes required by the API; multiple scopes can be
       // included, separated by spaces.
-      const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly';
+      const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
 
       let tokenClient;
       let gapiInited = false;
@@ -108,7 +113,7 @@ function wikiParse(text) {
             throw (resp);
           }
           document.getElementById('signout_button').style.visibility = 'visible';
-          document.getElementById('authorize_button').innerText = 'Refresh';
+          document.getElementById('authorize_button').innerText = '새로고침';
           await listMajors(docs);
         };
 
@@ -131,7 +136,7 @@ function wikiParse(text) {
           google.accounts.oauth2.revoke(token.access_token);
           gapi.client.setToken('');
           document.getElementById('content').innerText = '';
-          document.getElementById('authorize_button').innerText = 'Authorize';
+          document.getElementById('authorize_button').innerText = '로그인';
           document.getElementById('signout_button').style.visibility = 'hidden';
         }
       }
