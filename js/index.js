@@ -14,15 +14,6 @@ function getQueryStringObject() {
     return b;
 }
 
-function changePostDisabled(e) {
-    document.querySelector('#wordcount').innerText = e.value.length
-    if (e.value != '' ) {
-        document.querySelector('#post-button').disabled = false
-    } else {
-        document.querySelector('#post-button').disabled = true
-    }
-}
-
 var qs = getQueryStringObject()
 var docs = qs.d
 var page = qs.p
@@ -52,6 +43,16 @@ function wikiParse(text) {
     markdown = markdown.replace(/href\=\"([^\"\:]+)\"\>([^\<]+)\</gm, 'href="./?d=$1">$2<')
     markdown = markdown.replace(/href\=\"\"\>([^\<]+)\</gm, 'href="./?d=$1">$1<')
     return markdown
+}
+
+function changePostDisabled(e) {
+    document.querySelector('#wordcount').innerText = e.value.length
+    document.querySelector('#post-preview').innerHTML = wikiParse(e.value)
+    if (e.value != '' ) {
+        document.querySelector('#post-button').disabled = false
+    } else {
+        document.querySelector('#post-button').disabled = true
+    }
 }
 
 /* exported gapiLoaded */
@@ -321,7 +322,7 @@ async function renderContent(title) {
         } 
 
         document.getElementById('doc-title').innerHTML = title+' 편집';
-        document.getElementById('content').innerHTML = '<div id="post-label">'+edit+' 편집: <span id="wordcount"></span></div><textarea id="post-input" oninput="changePostDisabled(this)">'+output.replace(/\\n/gm, '&#010;')+`</textarea><button id="post-button" disabled="true" onclick="editDocs(${JSON.stringify(range.values.length)},'${edit}',document.querySelector('#post-input').value)">편집 완료!</button>`;
+        document.getElementById('content').innerHTML = '<div id="post-label">'+edit+' 편집: <span id="wordcount"></span></div><textarea id="post-input" oninput="changePostDisabled(this)">'+output.replace(/\\n/gm, '&#010;')+`</textarea><button id="post-button" disabled="true" onclick="editDocs(${JSON.stringify(range.values.length)},'${edit}',document.querySelector('#post-input').value)">편집 완료!</button><div id="post-preview"></div>`;
 
         window.addEventListener('beforeunload', (event) => {
             // Cancel the event as stated by the standard.
