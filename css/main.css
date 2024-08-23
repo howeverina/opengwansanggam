@@ -50,7 +50,8 @@ a {
 table {
     min-width: 300px;
     max-width: 100%;
-    border: 1px solid var(--bg);
+    width: fit-content;
+    border: 1px solid var(--accent);
     border-radius: 10px;
 }
 
