@@ -31,7 +31,7 @@ var title = ''
 
 if (!docs && !edit) {
     title = '시트1'
-} else if (docs != '') {
+} else if (!docs || docs != '') {
     title = docs
 } else if (edit != '') {
     title = edit
