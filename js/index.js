@@ -18,9 +18,14 @@ var qs = getQueryStringObject()
 var docs = qs.d
 var page = qs.p
 var edit = qs.e
+var title = ''
 
-if (!docs || docs == '') {
-    docs = '시트1'
+if (!docs && !edit) {
+    title = '시트1'
+} else if (docs != '') {
+    title = docs
+} else if (edit != '') {
+    title = edit
 }
 
 document.querySelector('#logo').innerHTML = WIKI_TITLE
@@ -82,7 +87,7 @@ async function initializeGapiClient() {
     });
     gapiInited = true;
     maybeEnableButtons();
-    listMajors(docs)
+    listMajors(title)
 }
 
     /**
@@ -122,7 +127,7 @@ function handleAuthClick() {
         var token = JSON.stringify(gapi.client.getToken())
         localStorage.setItem('googleToken', token)
 
-        await listMajors(docs);
+        await listMajors(title);
     };
 
     if ( gapi.client.getToken() === null) {
@@ -223,6 +228,6 @@ async function listMajors(title) {
         }
 
         document.getElementById('doc-title').innerHTML = title+' 편집';
-        document.getElementById('content').innerHTML = '<div id="post-label">'+edit+' 편집: <span id="wordcount"></span></div><input id="cw-input" placeholder="CW" ><textarea id="post-input" oninput="changePostDisabled(this)">'+output+'</textarea><button id="post-button" disabled="true" onclick="edit(range,edit,document.querySelector(`#post-input`).value)">편집 완료!</button>';
+        document.getElementById('content').innerHTML = '<div id="post-label">'+edit+' 편집: <span id="wordcount"></span></div><textarea id="post-input" oninput="changePostDisabled(this)">'+output+'</textarea><button id="post-button" disabled="true" onclick="edit(range,edit,document.querySelector(`#post-input`).value)">편집 완료!</button>';
     }
 }
