@@ -297,18 +297,32 @@ async function renderContent(title) {
 
     let response;
     try {
-        // Fetch first 10 files
         response = await gapi.client.sheets.spreadsheets.values.get({
-        spreadsheetId: SPREADSHEET_ID,
-        range: title+'!A2:C',
+            spreadsheetId: SPREADSHEET_ID,
+            range: title+'!A2:C',
         });
     } catch (err) {
-        document.getElementById('content').innerText = '토큰 생성 1시간이 경과하여 로그아웃되었습니다.';
-        if (localStorage.getItem('googleToken')) {
-            localStorage.removeItem('googleToken')
-            //location.href='./?d='+title
+        try {
+            response_err = await gapi.client.sheets.spreadsheets.values.get({
+                spreadsheetId: SPREADSHEET_ID,
+                range: '대문!A2:C',
+            });
+            if (response_err && localStorage.getitem('googleToken')) {
+                if (confirm("새 문서를 생성하시겠습니까?") == true) {
+                    postDocs(title)
+                } else {
+                    document.getElementById('content').innerText = "문서 생성을 취소하였습니다.";
+                }
+            } else {
+                document.getElementById('content').innerText = '문서 생성 권한이 없습니다.';
+            }
+        } catch (err2) {
+            document.getElementById('content').innerText = '토큰 생성 1시간이 경과하여 로그아웃되었습니다.';
+            if (localStorage.getItem('googleToken')) {
+                localStorage.removeItem('googleToken')
+            }
+            return;
         }
-        return;
     }
     const range = response.result;
     if (!range || !range.values || range.values.length == 0) {
