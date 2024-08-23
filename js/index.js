@@ -326,7 +326,7 @@ async function renderContent(title) {
         document.getElementById('doc-title').innerHTML = title+': v';
         document.getElementById('content').innerHTML = '<table id="version-list"><thead><tr><td>버전</td><td>변경 날짜</td><td>작업 수행</td></tr></thead><tbody></tbody></table>';
         for (var i=0; i<range.values.length; i++) {
-            document.querySelector('#version-list>tbody').innerHTML += '<tr><td>v'+(range.values.length-1-i)+'</td><td>'+range.values[(range.values.length-1-i)][1]+'</td><td><a href="./?d='+title+'&v='+i+'">읽기</a> <a href="./?e='+title+'&v='+i+'">이 버전으로부터 편집</a></td></tr>';
+            document.querySelector('#version-list>tbody').innerHTML += '<tr><td>v'+(range.values.length-1-i)+'</td><td>'+range.values[(range.values.length-1-i)][1]+'</td><td><a href="./?d='+title+'&v='+(range.values.length-1-i)+'">읽기</a> <a href="./?e='+title+'&v='+(range.values.length-1-i)+'">이 버전으로부터 편집</a></td></tr>';
         }
     } else if (version) {
         document.getElementById('history_button').style.display = 'inline';
