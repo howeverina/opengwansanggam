@@ -22,6 +22,8 @@ if (!docs || docs == '') {
     docs = '시트1'
 }
 
+document.querySelector('#logo').innerHTML = WIKI_TITLE
+
 document.querySelector('#search-button').href = './'
 document.querySelector('#search-input').addEventListener("input", (e) => {
     document.querySelector('#search-button').href= "./?d="+document.querySelector('#search-input').value
