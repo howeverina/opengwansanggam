@@ -27,10 +27,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-  
-      - name: Generate config.js
+        
+      - name: Set up environment variables
+        run: echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
+
+      - name: Inject environment variables into HTML
         run: |
-          echo "API_KEY='${{ secrets.API_KEY }}'" > ./config.js
+          sed -i 's/{{API_KEY}}/${{ secrets.API_KEY }}/g' ./index.html
   
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
