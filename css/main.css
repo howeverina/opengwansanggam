@@ -47,6 +47,18 @@ a {
     text-decoration: none;
 }
 
+table {
+    width: 100%;
+}
+
+td {
+    padding: 5px;
+}
+
+tr {
+    border-bottom: 1px solid var(--bg);
+}
+
 button {
     border-radius: 10px;
     border: 0;
