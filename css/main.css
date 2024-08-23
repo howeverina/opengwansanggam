@@ -35,6 +35,7 @@ input {
 p {
     margin-block-start: 0.5em;
     margin-block-end: 0.5em;
+    line-height: 1.6rem;
 }
 
 i {
@@ -100,4 +101,5 @@ textarea {
     display: flex;
     flex-direction: column;
     gap: 5px;
+    margin-bottom: 40px;
 }
