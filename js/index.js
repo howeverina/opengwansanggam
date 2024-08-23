@@ -15,11 +15,11 @@ function getQueryStringObject() {
 }
 
 var qs = getQueryStringObject()
-var document = qs.d
+var docs = qs.d
 var page = qs.p
 
-if (document = '') {
-    document = '시트1'
+if (docs = '') {
+    docs = '시트1'
 }
 
 function wikiParse(text) {
