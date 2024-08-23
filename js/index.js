@@ -303,11 +303,12 @@ async function renderContent(title) {
         });
     } catch (err) {
         try {
-            response_err = await gapi.client.sheets.spreadsheets.values.get({
+            var response_err = await gapi.client.sheets.spreadsheets.values.get({
                 spreadsheetId: SPREADSHEET_ID,
                 range: '대문!A2:C',
             });
-            if (response_err && localStorage.getitem('googleToken')) {
+            console.log(response_err.result)
+            if (response_err.result && localStorage.getitem('googleToken')) {
                 if (confirm("새 문서를 생성하시겠습니까?") == true) {
                     postDocs(title)
                 } else {
