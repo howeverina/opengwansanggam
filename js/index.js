@@ -69,9 +69,19 @@ async function wikiParse(text) {
     return markdown
 }
 
+function simpleParse(text) {
+    text = text.replace(/\\n\\n/gm, '\n\n')
+    text = text.replace(/\\n/gm, '\n')
+    var markdown = marked.parse(text)
+    markdown = markdown.replace(/href\=\"([^\"\:]+)\"\>([^\<]+)\</gm, 'href="./?d=$1">$2<')
+    markdown = markdown.replace(/href\=\"\"\>([^\<]+)\</gm, 'href="./?d=$1">$1<')
+    return markdown
+}
+
+
 function changePostDisabled(e) {
     document.querySelector('#wordcount').innerText = e.value.length
-    document.querySelector('#post-preview').innerHTML = wikiParse(e.value)
+    document.querySelector('#post-preview').innerHTML = simpleParse(e.value)
     if (e.value != '' ) {
         document.querySelector('#post-button').disabled = false
     } else {
