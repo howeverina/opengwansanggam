@@ -297,19 +297,25 @@ async function renderContent(title) {
 
     let response;
     let response_err
+    let response2
     try {
         response = await gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
             range: title+'!A2:C',
         });
     } catch (err) {
+        response_err = err
+        return;
+    }
+
+    if (response_err) {
         try {
-            response_err = await gapi.client.sheets.spreadsheets.values.get({
+            response2 = await gapi.client.sheets.spreadsheets.values.get({
                 spreadsheetId: SPREADSHEET_ID,
                 range: '대문!A2:C',
             });
-            console.log(response_err.result)
-            if (response_err.result && localStorage.getitem('googleToken')) {
+            console.log(response2.result)
+            if (response2.result && localStorage.getitem('googleToken')) {
                 if (confirm("새 문서를 생성하시겠습니까?") == true) {
                     postDocs(title)
                 } else {
@@ -325,8 +331,8 @@ async function renderContent(title) {
             }
             return;
         }
-        return;
     }
+    
     const range = response.result;
     if (!range || !range.values || range.values.length == 0) {
         document.getElementById('content').innerText = 'No values found.';
