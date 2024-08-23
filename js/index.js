@@ -49,8 +49,8 @@ function wikiParse(text) {
     text = text.replace(/\\n\\n/gm, '\n\n')
     text = text.replace(/\\n/gm, '\n')
     var markdown = marked.parse(text)
-    markdown = markdown.replace(/href\=\"\"\>([^\<]+)\</gm, 'href="./?d=$1">$1<')
     markdown = markdown.replace(/href\=\"([^\"]+)\"\>([^\<]+)\</gm, 'href="./?d=$1">$2<')
+    markdown = markdown.replace(/href\=\"\"\>([^\<]+)\</gm, 'href="./?d=$1">$1<')
     return markdown
 }
 
