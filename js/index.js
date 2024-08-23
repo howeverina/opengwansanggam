@@ -19,7 +19,8 @@ let beforeUnloadAlert = true;
 var qs = getQueryStringObject()
 var docs = qs.d
 var page = qs.p
-var edit = qs.ed
+var edit = qs.e
+var version = qs.v
 var title = ''
 
 if (!docs && !edit) {
@@ -155,7 +156,7 @@ function gisLoaded() {
 }
 
 function handleEditClick() {
-    location.href="./?ed="+title
+    location.href="./?e="+title
 }
     /**
      * Enables user interaction after all libraries are loaded.
@@ -335,10 +336,10 @@ async function renderContent(title) {
         range: title+'!A2:C',
         });
     } catch (err) {
-        document.getElementById('content').innerText = '문서 생성 권한이 없습니다.';
+        document.getElementById('content').innerText = '토큰 생성 1시간이 경과하여 로그아웃되었습니다.';
         if (localStorage.getItem('googleToken')) {
             localStorage.removeItem('googleToken')
-            location.href='./?d='+title
+            //location.href='./?d='+title
         }
         return;
     }
@@ -347,13 +348,26 @@ async function renderContent(title) {
         document.getElementById('content').innerText = 'No values found.';
         return;
     }
-    
-    const output = range.values[range.values.length - 1][2]
-    document.getElementById('doc-title').innerHTML = title;
-    document.getElementById('content').innerHTML = await wikiParse(output);
 
-
-    if (edit) {
+    if (version && edit) {
+        const output = range.values[version][2]
         loginForEditing(title, range.values.length, output)
+    } else if (edit) {
+        const output = range.values[range.values.length - 1][2]
+        loginForEditing(title, range.values.length, output)
+    } else if (version == 'list') {
+        document.getElementById('doc-title').innerHTML = title+': v';
+        document.getElementById('content').innerHTML = '<table id="version-list"><thead><tr><td>버전</td><td>변경 날짜</td><td>작업 수행</td></tr></thead><tbody></tbody></table>';
+        for (var i=0; i<range.values.length; i++) {
+            document.getElementById('#version-list>tbody').innerHTML = '<tr><td>v'+(range.values.length-1-i)+'</td><td>'+range.values[(range.values.length-1-i)][1]+'</td><td><a href="./?d=title&v='+i+'">읽기</a> <a href="./?d=title&e='+i+'">이 버전으로부터 편집</a></td></tr>';
+        }
+    } else if (version) {
+        const output = range.values[version][2]
+        document.getElementById('doc-title').innerHTML = title+': v'+version;
+        document.getElementById('content').innerHTML = await wikiParse(output);
+    } else {
+        const output = range.values[range.values.length - 1][2]
+        document.getElementById('doc-title').innerHTML = title;
+        document.getElementById('content').innerHTML = await wikiParse(output);
     }
 }
