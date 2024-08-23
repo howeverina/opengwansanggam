@@ -36,14 +36,6 @@ if (!docs && !edit) {
 } else if (edit != '') {
     title = edit
 }
-
-var token = localStorage.getItem('googleToken');
-if (!token) {
-    location.href = './?d='+edit
-} else {
-    gapi.client.setToken(JSON.parse(token))
-}
-
 document.querySelector('#logo').innerHTML = WIKI_TITLE
 const SECRET3 = 'Jkjn4rM'
 
@@ -92,6 +84,8 @@ function gapiLoaded() {
     gapi.load('client', initializeGapiClient);
 }
 
+
+
     /**
      * Callback after the API client is loaded. Loads the
      * discovery doc to initialize the API.
@@ -136,6 +130,14 @@ function maybeEnableButtons() {
      *  Sign in the user upon button click.
      */
 function handleAuthClick() {
+
+    var token = localStorage.getItem('googleToken');
+    if (!token) {
+        location.href = './?d='+edit
+    } else {
+        gapi.client.setToken(JSON.parse(token))
+    }
+
     tokenClient.callback = async (resp) => {
         if (resp.error !== undefined) {
             throw (resp);
@@ -238,7 +240,14 @@ function editDocs(range, title, input) {
      * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
      */
 async function listMajors(title) {
-    
+
+    var token = localStorage.getItem('googleToken');
+    if (!token) {
+        location.href = './?d='+edit
+    } else {
+        gapi.client.setToken(JSON.parse(token))
+    }
+
     let response;
     try {
         // Fetch first 10 files
