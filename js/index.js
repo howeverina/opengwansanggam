@@ -184,7 +184,7 @@ function editDocs(range, title, input) {
       gapi.client.sheets.spreadsheets.values.update({
         spreadsheetId: SPREADSHEET_ID,
         range: title,
-        valueInputOption: valueInputOption,
+        valueInputOption: "RAW",
         resource: body,
       }).then((response) => {
         location.href="./?d="+title
