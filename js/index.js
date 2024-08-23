@@ -332,12 +332,14 @@ async function renderContent(title) {
         document.getElementById('history_button').style.display = 'inline';
         const output = range.values[version][2]
         document.getElementById('doc-title').innerHTML = title+': v'+version;
-        document.getElementById('content').innerHTML = await wikiParse(output);
+        document.getElementById('content').innerHTML = '<p style="font-size:0.8rem;">수정본: ' + range.values[version][1] + '</p>'
+        document.getElementById('content').innerHTML += await wikiParse(output);
     } else {
         document.getElementById('history_button').style.display = 'inline';
         const output = range.values[range.values.length - 1][2]
         document.getElementById('doc-title').innerHTML = title;
-        document.getElementById('content').innerHTML = await wikiParse(output);
+        document.getElementById('content').innerHTML = '<p style="font-size:0.8rem;">마지막 수정: ' + range.values[range.values.length - 1][1] + '</p>'
+        document.getElementById('content').innerHTML += await wikiParse(output);
     }
 
     var token
