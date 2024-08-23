@@ -113,8 +113,8 @@ const SECRET2 = 'y4hyRoJ'
         try {
           // Fetch first 10 files
           response = await gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
-            range: 'Class Data!A2:E',
+            spreadsheetId: SPREADSHEET_ID,
+            range: 'Class 시트1!A2:C',
           });
         } catch (err) {
           document.getElementById('content').innerText = err.message;
@@ -126,8 +126,9 @@ const SECRET2 = 'y4hyRoJ'
           return;
         }
         // Flatten to string to display
-        const output = range.values.reduce(
-            (str, row) => `${str}${row[0]}, ${row[4]}\n`,
-            'Name, Major:\n');
-        document.getElementById('content').innerText = output;
+        console.log(range.values)
+        //const output = range.values.reduce(
+            // (str, row) => `${str}${row[0]}, ${row[2]}\n`,
+            // 'Name, Major:\n');
+        //document.getElementById('content').innerText = output;
       }
