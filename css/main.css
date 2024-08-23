@@ -48,15 +48,14 @@ a {
 }
 
 table {
-    width: 100%;
+    min-width: 300px;
+    max-width: 100%;
+    border: 1px solid var(--bg);
+    border-radius: 10px;
 }
 
 td {
     padding: 5px;
-}
-
-tr {
-    border-bottom: 1px solid var(--bg);
 }
 
 button {
