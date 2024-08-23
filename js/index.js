@@ -65,8 +65,10 @@ async function wikiParse(text) {
                 console.log(err)
             }
         }
+        console.log(markdown)
         return markdown
     } else {
+        console.log(markdown)
         return markdown
     }
 }
