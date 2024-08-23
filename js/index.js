@@ -83,11 +83,6 @@ const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4'
 function gapiLoaded() {
     gapi.load('client', initializeGapiClient);
 
-    var token = localStorage.getItem('googleToken');
-    if (token) {
-        gapi.client.setToken(JSON.parse(token))
-    }
-    
 }
 
 
@@ -117,6 +112,12 @@ function gisLoaded() {
         scope: SCOPES,
         callback: 'https://wiki.rongo.moe/', // defined later
     });
+    
+    var token = localStorage.getItem('googleToken');
+    if (token) {
+        gapi.client.setToken(JSON.parse(token))
+    }
+    
     gisInited = true;
     maybeEnableButtons();
 }
