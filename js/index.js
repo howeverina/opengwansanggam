@@ -43,7 +43,7 @@ async function wikiParse(text) {
     var markdown = marked.parse(text)
     markdown = markdown.replace(/href\=\"([^\"\:]+)\"\>([^\<]+)\</gm, 'href="./?d=$1">$2<')
     markdown = markdown.replace(/href\=\"\"\>([^\<]+)\</gm, 'href="./?d=$1">$1<')
-    if (markdown.includes('img src alt="')) {
+    if (markdown.includes('img src="" alt="')) {
         let includeArray = markdown.split('img src="" alt="').slice(1)
         // let responseArray;
         for await (including of includeArray) {
@@ -60,7 +60,7 @@ async function wikiParse(text) {
                 content = content.replace(/href\=\"([^\"\:]+)\"\>([^\<]+)\</gm, 'href="./?d=$1">$2<')
                 content = content.replace(/href\=\"\"\>([^\<]+)\</gm, 'href="./?d=$1">$1<')
                 // responseArray.push(content)
-                markdown.replace(including, content)
+                markdown.replace('<img src="" alt="'+including+'">', content)
             } catch (err) {
                 console.log(err)
             }
