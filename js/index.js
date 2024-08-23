@@ -95,6 +95,14 @@ async function initializeGapiClient() {
         apiKey: API_KEY,
         discoveryDocs: [DISCOVERY_DOC],
     });
+
+    var token = localStorage.getItem('googleToken');
+    if (!token) {
+        location.href = './?d='+edit
+    } else {
+        gapi.client.setToken(JSON.parse(token))
+    }
+    
     gapiInited = true;
     maybeEnableButtons();
     listMajors(title)
@@ -130,13 +138,6 @@ function maybeEnableButtons() {
      *  Sign in the user upon button click.
      */
 function handleAuthClick() {
-
-    var token = localStorage.getItem('googleToken');
-    if (!token) {
-        location.href = './?d='+edit
-    } else {
-        gapi.client.setToken(JSON.parse(token))
-    }
 
     tokenClient.callback = async (resp) => {
         if (resp.error !== undefined) {
@@ -240,7 +241,7 @@ function editDocs(range, title, input) {
      * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
      */
 async function listMajors(title) {
-    
+
     let response;
     try {
         // Fetch first 10 files
