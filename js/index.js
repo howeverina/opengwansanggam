@@ -1,4 +1,4 @@
-const SECRET2 = 'FVI0xHVfOS'
+const SECRET2 = 'y4hyRoJ'
 
 /* exported gapiLoaded */
       /* exported gisLoaded */
@@ -6,8 +6,8 @@ const SECRET2 = 'FVI0xHVfOS'
       /* exported handleSignoutClick */
 
       // TODO(developer): Set to client ID and API key from the Developer Console
-    const SECRET3 = 'ZnlGcMPaTidkFKdyL'
-      const API_KEY = SECRET1 + '-' + SECRET2 + '-' + SECRET3;
+    const SECRET3 = 'Jkjn4rM'
+      const API_KEY = SECRET1 + '-' + SECRET2 + '_' + SECRET3;
 
       // Discovery doc URL for APIs used by the quickstart
       const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
