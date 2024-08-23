@@ -99,25 +99,6 @@ async function initializeGapiClient() {
 
     gapiInited = true;
 
-    var token
-    if (gapi.client) {
-        if (gapi.client.getToken() == null) {
-            if (localStorage.getItem('googleToken')) {
-                token = localStorage.getItem('googleToken');
-                if (token) {
-                    gapi.client.setToken(JSON.parse(token))
-                }
-            }
-        }
-    } else {
-        if (localStorage.getItem('googleToken')) {
-            token = localStorage.getItem('googleToken');
-            if (token) {
-                gapi.client.setToken(JSON.parse(token))
-            }
-        }
-    }
-
     maybeEnableButtons();
     renderContent(title)
 }
@@ -154,6 +135,25 @@ function maybeEnableButtons() {
      *  Sign in the user upon button click.
      */
 function handleAuthClick() {
+
+    var token
+    if (gapi.client) {
+        if (gapi.client.getToken() == null) {
+            if (localStorage.getItem('googleToken')) {
+                token = localStorage.getItem('googleToken');
+                if (token) {
+                    gapi.client.setToken(JSON.parse(token))
+                }
+            }
+        }
+    } else {
+        if (localStorage.getItem('googleToken')) {
+            token = localStorage.getItem('googleToken');
+            if (token) {
+                gapi.client.setToken(JSON.parse(token))
+            }
+        }
+    }
 
     tokenClient.callback = async (resp) => {
         if (resp.error !== undefined) {
@@ -295,7 +295,7 @@ async function renderContent(title) {
 
     if (edit) {
 
-        if (!token) {
+        if (!gapi.client.getToken()) {
             location.href = './?d='+edit
         } 
 
