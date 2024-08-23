@@ -305,7 +305,6 @@ async function renderContent(title) {
         });
     } catch (err) {
         console.log(err)
-        return;
     }
 
     console.log(response)
