@@ -114,7 +114,7 @@ const SECRET2 = 'y4hyRoJ'
           // Fetch first 10 files
           response = await gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
-            range: 'Class 시트1!A2:C',
+            range: '시트1!A2:C',
           });
         } catch (err) {
           document.getElementById('content').innerText = err.message;
@@ -127,8 +127,9 @@ const SECRET2 = 'y4hyRoJ'
         }
         // Flatten to string to display
         console.log(range.values)
+        const output = range.values[range.values.length - 1][2]
         //const output = range.values.reduce(
             // (str, row) => `${str}${row[0]}, ${row[2]}\n`,
             // 'Name, Major:\n');
-        //document.getElementById('content').innerText = output;
+        document.getElementById('content').innerText = marked.parse(output);
       }
