@@ -26,14 +26,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
   
       - name: Generate config.js
         run: |
-          echo "MY_ENV_VARIABLE='${{ secrets.API_KEY }}'" > ./config.js
+          echo "API_KEY='${{ secrets.API_KEY }}'" > ./config.js
   
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          publish_dir: .
+          force_orphan: true
