@@ -304,7 +304,7 @@ async function renderContent(title) {
             range: title+'!A2:C',
         });
     } catch (err) {
-        response_err = err
+        response_err = await err
         return;
     }
 
@@ -332,7 +332,7 @@ async function renderContent(title) {
             return;
         }
     }
-    
+
     const range = response.result;
     if (!range || !range.values || range.values.length == 0) {
         document.getElementById('content').innerText = 'No values found.';
