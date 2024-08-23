@@ -92,6 +92,10 @@ img {
     font-weight: 700;
 }
 
+#search-input {
+    Max-width: 40vw;
+}
+
 #sub-wrapper {
     width: calc(100% - 30px);
     max-width: 600px;
