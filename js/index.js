@@ -349,7 +349,7 @@ async function renderContent(title) {
         // (str, row) => `${str}${row[0]}, ${row[2]}\n`,
         // 'Name, Major:\n');
     document.getElementById('doc-title').innerHTML = title;
-    document.getElementById('content').innerHTML = wikiParse(output);
+    document.getElementById('content').innerHTML = await wikiParse(output);
 
     if (edit) {
 
