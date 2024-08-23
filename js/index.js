@@ -271,37 +271,7 @@ function editDocs(range, title, input) {
     }
   }
 
-async function renderContent(title) {
-
-    let response;
-    try {
-        // Fetch first 10 files
-        response = await gapi.client.sheets.spreadsheets.values.get({
-        spreadsheetId: SPREADSHEET_ID,
-        range: title+'!A2:C',
-        });
-    } catch (err) {
-        document.getElementById('content').innerText = '문서 생성 권한이 없습니다.';
-        if (localStorage.getItem('googleToken')) {
-            localStorage.removeItem('googleToken')
-            location.href='./?d='+title
-        }
-        return;
-    }
-    const range = response.result;
-    if (!range || !range.values || range.values.length == 0) {
-        document.getElementById('content').innerText = 'No values found.';
-        return;
-    }
-    
-    const output = range.values[range.values.length - 1][2]
-    document.getElementById('doc-title').innerHTML = title;
-    document.getElementById('content').innerHTML = await wikiParse(output);
-
-    loginForEditing(title)
-}
-
-async function loginForEditing(title) {
+async function loginForEditing(title, output) {
     var token
     if (gapi.client) {
         if (gapi.client.getToken() == null) {
@@ -339,21 +309,51 @@ async function loginForEditing(title) {
         }
     }
 
-    if (edit) {
+    if (!localStorage.getItem('googleToken')) {
+        location.href = './?d='+edit
+    } 
 
-        if (!localStorage.getItem('googleToken')) {
-            location.href = './?d='+edit
-        } 
+    document.getElementById('doc-title').innerHTML = title+' 편집';
+    document.getElementById('content').innerHTML = '<div id="post-label">'+edit+' 편집: <span id="wordcount"></span></div><textarea id="post-input" oninput="changePostDisabled(this)">'+output.replace(/\\n/gm, '&#010;')+`</textarea><button id="post-button" disabled="true" onclick="editDocs(${JSON.stringify(range.values.length)},'${edit}',document.querySelector('#post-input').value)">편집 완료!</button><div id="post-preview"></div>`;
+    
+    window.addEventListener('beforeunload', function (e) {
+        if (!beforeUnloadAlert) return;
+        // Cancel the event as stated by the standard.
+        event.preventDefault();
+        // Chrome requires returnValue to be set.
+        event.returnValue = '';
+    });
+}
 
-        document.getElementById('doc-title').innerHTML = title+' 편집';
-        document.getElementById('content').innerHTML = '<div id="post-label">'+edit+' 편집: <span id="wordcount"></span></div><textarea id="post-input" oninput="changePostDisabled(this)">'+output.replace(/\\n/gm, '&#010;')+`</textarea><button id="post-button" disabled="true" onclick="editDocs(${JSON.stringify(range.values.length)},'${edit}',document.querySelector('#post-input').value)">편집 완료!</button><div id="post-preview"></div>`;
-        
-        window.addEventListener('beforeunload', function (e) {
-          if (!beforeUnloadAlert) return;
-            // Cancel the event as stated by the standard.
-            event.preventDefault();
-            // Chrome requires returnValue to be set.
-            event.returnValue = '';
+async function renderContent(title) {
+
+    let response;
+    try {
+        // Fetch first 10 files
+        response = await gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: title+'!A2:C',
         });
+    } catch (err) {
+        document.getElementById('content').innerText = '문서 생성 권한이 없습니다.';
+        if (localStorage.getItem('googleToken')) {
+            localStorage.removeItem('googleToken')
+            location.href='./?d='+title
+        }
+        return;
+    }
+    const range = response.result;
+    if (!range || !range.values || range.values.length == 0) {
+        document.getElementById('content').innerText = 'No values found.';
+        return;
+    }
+    
+    const output = range.values[range.values.length - 1][2]
+    document.getElementById('doc-title').innerHTML = title;
+    document.getElementById('content').innerHTML = await wikiParse(output);
+
+
+    if (edit) {
+        loginForEditing(title, output)
     }
 }
