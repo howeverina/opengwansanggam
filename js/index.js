@@ -135,7 +135,6 @@ function maybeEnableButtons() {
      */
 function handleAuthClick() {
 
-
     tokenClient.callback = async (resp) => {
         if (resp.error !== undefined) {
             throw (resp);
