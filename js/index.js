@@ -49,8 +49,9 @@ const SECRET2 = 'y4hyRoJ'
       function gisLoaded() {
         tokenClient = google.accounts.oauth2.initTokenClient({
           client_id: CLIENT_ID,
+          redirect_uri: 'https://wiki.rongo.moe/',
           scope: SCOPES,
-          callback: '', // defined later
+          callback: 'https://wiki.rongo.moe/', // defined later
         });
         gisInited = true;
         maybeEnableButtons();
