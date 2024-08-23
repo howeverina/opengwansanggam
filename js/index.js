@@ -41,7 +41,7 @@ const SECRET2 = 'y4hyRoJ'
         });
         gapiInited = true;
         maybeEnableButtons();
-        listMajors()
+        listMajors('시트1')
       }
 
       /**
@@ -77,7 +77,7 @@ const SECRET2 = 'y4hyRoJ'
           }
           document.getElementById('signout_button').style.visibility = 'visible';
           document.getElementById('authorize_button').innerText = 'Refresh';
-          await listMajors();
+          await listMajors('시트1');
         };
 
         if (gapi.client.getToken() === null) {
@@ -108,13 +108,14 @@ const SECRET2 = 'y4hyRoJ'
        * Print the names and majors of students in a sample spreadsheet:
        * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
        */
-      async function listMajors() {
+      async function listMajors(title) {
+        
         let response;
         try {
           // Fetch first 10 files
           response = await gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
-            range: '시트1!A2:C',
+            range: title+'!A2:C',
           });
         } catch (err) {
           document.getElementById('content').innerText = err.message;
@@ -131,5 +132,6 @@ const SECRET2 = 'y4hyRoJ'
         //const output = range.values.reduce(
             // (str, row) => `${str}${row[0]}, ${row[2]}\n`,
             // 'Name, Major:\n');
-        document.getElementById('content').innerText = marked.parse(output);
+        document.getElementById('doc-title').innerHTML = title;
+        document.getElementById('content').innerHTML = marked.parse(output);
       }
