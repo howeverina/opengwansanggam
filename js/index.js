@@ -98,22 +98,6 @@ async function initializeGapiClient() {
     });
 
     gapiInited = true;
-    maybeEnableButtons();
-    listMajors(title)
-}
-
-    /**
-     * Callback after Google Identity Services are loaded.
-     */
-function gisLoaded() {
-    tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        redirect_uri: 'https://wiki.rongo.moe/',
-        scope: SCOPES,
-        callback: 'https://wiki.rongo.moe/', // defined later
-    });
-    gisInited = true;
-    maybeEnableButtons();
 
     var token
     if (gapi.client) {
@@ -133,6 +117,24 @@ function gisLoaded() {
             }
         }
     }
+
+    maybeEnableButtons();
+    renderContent(title)
+}
+
+    /**
+     * Callback after Google Identity Services are loaded.
+     */
+function gisLoaded() {
+    tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        redirect_uri: 'https://wiki.rongo.moe/',
+        scope: SCOPES,
+        callback: 'https://wiki.rongo.moe/', // defined later
+    });
+    gisInited = true;
+    maybeEnableButtons();
+
 }
 
 function handleEditClick() {
@@ -164,7 +166,7 @@ function handleAuthClick() {
         var token = JSON.stringify(gapi.client.getToken())
         localStorage.setItem('googleToken', token)
 
-        await listMajors(title);
+        await renderContent(title);
     };
 
     if ( gapi.client.getToken() === null) {
@@ -177,6 +179,7 @@ function handleAuthClick() {
         // Skip display of account chooser and consent dialog for an existing session.
         tokenClient.requestAccessToken({prompt: ''});
     }
+    
 }
 
     /**
@@ -254,7 +257,7 @@ function editDocs(range, title, input) {
      * Print the names and majors of students in a sample spreadsheet:
      * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
      */
-async function listMajors(title) {
+async function renderContent(title) {
 
     let response;
     try {
