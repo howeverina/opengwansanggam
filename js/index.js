@@ -249,6 +249,7 @@ async function renderContent(title) {
                     gapi.client.setToken(JSON.parse(token))
                     document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice"></i>'
                     document.getElementById('signout_button').style.display = 'inline';
+                    document.getElementById('edit_button').style.display = 'inline';
                     document.getElementById('authorize_button').innerText = '새로고침';
                 }
             } else {
@@ -260,6 +261,7 @@ async function renderContent(title) {
         } else {
             document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice"></i>'
             document.getElementById('signout_button').style.display = 'inline';
+            document.getElementById('edit_button').style.display = 'inline';
             document.getElementById('authorize_button').innerText = '새로고침';
         }
     } else {
@@ -268,6 +270,7 @@ async function renderContent(title) {
             if (token) {
                 gapi.client.setToken(JSON.parse(token))
                     document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice"></i>'
+                    document.getElementById('edit_button').style.display = 'inline';
                     document.getElementById('signout_button').style.display = 'inline';
                     document.getElementById('authorize_button').innerText = '새로고침';
             }
