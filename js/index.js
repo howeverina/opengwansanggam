@@ -82,6 +82,12 @@ const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4'
      */
 function gapiLoaded() {
     gapi.load('client', initializeGapiClient);
+
+    var token = localStorage.getItem('googleToken');
+    if (token) {
+        gapi.client.setToken(JSON.parse(token))
+    }
+    
 }
 
 
@@ -96,13 +102,6 @@ async function initializeGapiClient() {
         discoveryDocs: [DISCOVERY_DOC],
     });
 
-    var token = localStorage.getItem('googleToken');
-    if (!token) {
-        location.href = './?d='+edit
-    } else {
-        gapi.client.setToken(JSON.parse(token))
-    }
-    
     gapiInited = true;
     maybeEnableButtons();
     listMajors(title)
@@ -129,6 +128,7 @@ function handleEditClick() {
      * Enables user interaction after all libraries are loaded.
      */
 function maybeEnableButtons() {
+
     if (gapiInited && gisInited) {
         document.getElementById('authorize_button').style.visibility = 'visible';
     }
@@ -277,6 +277,10 @@ async function listMajors(title) {
     document.getElementById('content').innerHTML = wikiParse(output);
 
     if (edit) {
+
+        if (!token) {
+            location.href = './?d='+edit
+        } 
 
         console.log('edit 화면')
 
