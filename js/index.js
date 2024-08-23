@@ -136,24 +136,6 @@ function maybeEnableButtons() {
      */
 function handleAuthClick() {
 
-    var token
-    if (gapi.client) {
-        if (gapi.client.getToken() == null) {
-            if (localStorage.getItem('googleToken')) {
-                token = localStorage.getItem('googleToken');
-                if (token) {
-                    gapi.client.setToken(JSON.parse(token))
-                }
-            }
-        }
-    } else {
-        if (localStorage.getItem('googleToken')) {
-            token = localStorage.getItem('googleToken');
-            if (token) {
-                gapi.client.setToken(JSON.parse(token))
-            }
-        }
-    }
 
     tokenClient.callback = async (resp) => {
         if (resp.error !== undefined) {
@@ -258,6 +240,24 @@ function editDocs(range, title, input) {
      * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
      */
 async function renderContent(title) {
+    var token
+    if (gapi.client) {
+        if (gapi.client.getToken() == null) {
+            if (localStorage.getItem('googleToken')) {
+                token = localStorage.getItem('googleToken');
+                if (token) {
+                    gapi.client.setToken(JSON.parse(token))
+                }
+            }
+        }
+    } else {
+        if (localStorage.getItem('googleToken')) {
+            token = localStorage.getItem('googleToken');
+            if (token) {
+                gapi.client.setToken(JSON.parse(token))
+            }
+        }
+    }
 
     let response;
     try {
@@ -295,7 +295,7 @@ async function renderContent(title) {
 
     if (edit) {
 
-        if (!gapi.client.getToken()) {
+        if (!localStorage.getItem('googleToken')) {
             location.href = './?d='+edit
         } 
 
