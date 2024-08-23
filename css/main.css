@@ -61,6 +61,10 @@ textarea {
     resize: none;
 }
 
+img {
+    max-width: calc(100% - 30px);
+}
+
 #navbar {
     width: calc(100vw - 2em);
     display: flex;
