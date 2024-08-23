@@ -18,7 +18,7 @@ var qs = getQueryStringObject()
 var docs = qs.d
 var page = qs.p
 
-if (docs = '') {
+if (docs == '') {
     docs = '시트1'
 }
 
