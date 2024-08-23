@@ -26,7 +26,7 @@ function changePostDisabled(e) {
 var qs = getQueryStringObject()
 var docs = qs.d
 var page = qs.p
-var edit = qs.e
+var edit = qs.ed
 var title = ''
 
 if (!docs && !edit) {
