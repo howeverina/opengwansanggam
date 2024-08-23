@@ -41,6 +41,7 @@ const SECRET2 = 'y4hyRoJ'
         });
         gapiInited = true;
         maybeEnableButtons();
+        listMajors()
       }
 
       /**
