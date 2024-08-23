@@ -30,7 +30,7 @@ var edit = qs.ed
 var title = ''
 
 if (!docs && !edit) {
-    title = '시트1'
+    title = '대문'
 } else if (docs != undefined) {
     title = docs
 } else if (edit != '') {
