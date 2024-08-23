@@ -329,10 +329,12 @@ async function renderContent(title) {
             document.querySelector('#version-list>tbody').innerHTML += '<tr><td>v'+(range.values.length-1-i)+'</td><td>'+range.values[(range.values.length-1-i)][1]+'</td><td><a href="./?d=title&v='+i+'">읽기</a> <a href="./?e=title&v='+i+'">이 버전으로부터 편집</a></td></tr>';
         }
     } else if (version) {
+        document.getElementById('history_button').style.display = 'inline';
         const output = range.values[version][2]
         document.getElementById('doc-title').innerHTML = title+': v'+version;
         document.getElementById('content').innerHTML = await wikiParse(output);
     } else {
+        document.getElementById('history_button').style.display = 'inline';
         const output = range.values[range.values.length - 1][2]
         document.getElementById('doc-title').innerHTML = title;
         document.getElementById('content').innerHTML = await wikiParse(output);
