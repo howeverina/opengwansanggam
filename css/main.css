@@ -14,9 +14,11 @@
 
 :root {
     --accent: #3e8d3e;
+    --bg: #f8f8f8;
 }
 
 body {
+    background: var(--bg);
     font-family: 'NanumSquareNeo';
     margin: 0;
     font-size: 14px;
@@ -81,9 +83,12 @@ textarea {
 }
 
 #sub-wrapper {
-    width: 100%;
+    width: calc(100% - 30px);
     max-width: 600px;
     margin: 40px auto;
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
 }
 
 #content {
