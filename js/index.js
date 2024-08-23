@@ -307,7 +307,6 @@ async function renderContent(title) {
         return;
     }
     // Flatten to string to display
-    console.log(range.values)
     const output = range.values[range.values.length - 1][2]
     //const output = range.values.reduce(
         // (str, row) => `${str}${row[0]}, ${row[2]}\n`,
@@ -320,8 +319,6 @@ async function renderContent(title) {
         if (!localStorage.getItem('googleToken')) {
             location.href = './?d='+edit
         } 
-
-        console.log('edit 화면')
 
         document.getElementById('doc-title').innerHTML = title+' 편집';
         document.getElementById('content').innerHTML = '<div id="post-label">'+edit+' 편집: <span id="wordcount"></span></div><textarea id="post-input" oninput="changePostDisabled(this)">'+output.replace(/\\n/gm, '&#010;')+`</textarea><button id="post-button" disabled="true" onclick="editDocs(${JSON.stringify(range.values.length)},'${edit}',document.querySelector('#post-input').value)">편집 완료!</button>`;
