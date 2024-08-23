@@ -309,7 +309,7 @@ async function renderContent(title) {
 
     console.log(response)
 
-    if (!response.result) {
+    if (!response) {
         try {
             response2 = await gapi.client.sheets.spreadsheets.values.get({
                 spreadsheetId: SPREADSHEET_ID,
