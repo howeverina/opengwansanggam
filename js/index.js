@@ -42,158 +42,187 @@ function wikiParse(text) {
     return markdown
 }
 
-if (docs && !page && !edit) {
-
 /* exported gapiLoaded */
-      /* exported gisLoaded */
-      /* exported handleAuthClick */
-      /* exported handleSignoutClick */
+    /* exported gisLoaded */
+    /* exported handleAuthClick */
+    /* exported handleSignoutClick */
 
-      // TODO(developer): Set to client ID and API key from the Developer Console
-    const API_KEY = SECRET1 + '-' + SECRET2 + '_' + SECRET3;
+    // TODO(developer): Set to client ID and API key from the Developer Console
+const API_KEY = SECRET1 + '-' + SECRET2 + '_' + SECRET3;
 
-      // Discovery doc URL for APIs used by the quickstart
-    const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
+    // Discovery doc URL for APIs used by the quickstart
+const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
 
-      // Authorization scopes required by the API; multiple scopes can be
-      // included, separated by spaces.
-      const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
+    // Authorization scopes required by the API; multiple scopes can be
+    // included, separated by spaces.
+    const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
 
-      let tokenClient;
-      let gapiInited = false;
-      let gisInited = false;
+    let tokenClient;
+    let gapiInited = false;
+    let gisInited = false;
 
-      document.getElementById('authorize_button').style.visibility = 'hidden';
-      document.getElementById('signout_button').style.visibility = 'hidden';
+    document.getElementById('authorize_button').style.visibility = 'hidden';
+    document.getElementById('signout_button').style.visibility = 'hidden';
 
-      /**
-       * Callback after api.js is loaded.
-       */
-    function gapiLoaded() {
-        gapi.load('client', initializeGapiClient);
+    /**
+     * Callback after api.js is loaded.
+     */
+function gapiLoaded() {
+    gapi.load('client', initializeGapiClient);
+}
+
+    /**
+     * Callback after the API client is loaded. Loads the
+     * discovery doc to initialize the API.
+     */
+async function initializeGapiClient() {
+    await gapi.client.init({
+        apiKey: API_KEY,
+        discoveryDocs: [DISCOVERY_DOC],
+    });
+    gapiInited = true;
+    maybeEnableButtons();
+    listMajors(docs)
+}
+
+    /**
+     * Callback after Google Identity Services are loaded.
+     */
+function gisLoaded() {
+    tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        redirect_uri: 'https://wiki.rongo.moe/',
+        scope: SCOPES,
+        callback: 'https://wiki.rongo.moe/', // defined later
+    });
+    gisInited = true;
+    maybeEnableButtons();
+}
+
+    /**
+     * Enables user interaction after all libraries are loaded.
+     */
+function maybeEnableButtons() {
+    if (gapiInited && gisInited) {
+        document.getElementById('authorize_button').style.visibility = 'visible';
     }
+}
 
-      /**
-       * Callback after the API client is loaded. Loads the
-       * discovery doc to initialize the API.
-       */
-    async function initializeGapiClient() {
-        await gapi.client.init({
-          apiKey: API_KEY,
-          discoveryDocs: [DISCOVERY_DOC],
-        });
-        gapiInited = true;
-        maybeEnableButtons();
-        listMajors(docs)
-    }
-
-      /**
-       * Callback after Google Identity Services are loaded.
-       */
-    function gisLoaded() {
-        tokenClient = google.accounts.oauth2.initTokenClient({
-          client_id: CLIENT_ID,
-          redirect_uri: 'https://wiki.rongo.moe/',
-          scope: SCOPES,
-          callback: 'https://wiki.rongo.moe/', // defined later
-        });
-        gisInited = true;
-        maybeEnableButtons();
-    }
-
-      /**
-       * Enables user interaction after all libraries are loaded.
-       */
-    function maybeEnableButtons() {
-        if (gapiInited && gisInited) {
-          document.getElementById('authorize_button').style.visibility = 'visible';
+    /**
+     *  Sign in the user upon button click.
+     */
+function handleAuthClick() {
+    tokenClient.callback = async (resp) => {
+        if (resp.error !== undefined) {
+            throw (resp);
         }
+        document.getElementById('signout_button').style.visibility = 'visible';
+        document.getElementById('authorize_button').innerText = '새로고침';
+
+        var token = JSON.stringify(gapi.client.getToken())
+        localStorage.setItem('googleToken', token)
+
+        await listMajors(docs);
+    };
+
+    if ( gapi.client.getToken() === null) {
+        // Prompt the user to select a Google Account and ask for consent to share their data
+        // when establishing a new session.
+        tokenClient.requestAccessToken({prompt: 'consent'});
+        var token = JSON.stringify(gapi.client.getToken())
+        localStorage.setItem('googleToken', token)
+    } else {
+        // Skip display of account chooser and consent dialog for an existing session.
+        tokenClient.requestAccessToken({prompt: ''});
     }
+}
 
-      /**
-       *  Sign in the user upon button click.
-       */
-    function handleAuthClick() {
-        tokenClient.callback = async (resp) => {
-            if (resp.error !== undefined) {
-                throw (resp);
-            }
-            document.getElementById('signout_button').style.visibility = 'visible';
-            document.getElementById('authorize_button').innerText = '새로고침';
-
-            var token = gapi.client.getToken()
-            localStorage.setItem('googleToken', token)
-
-            await listMajors(docs);
-        };
-
-        if ( gapi.client.getToken() === null) {
-          // Prompt the user to select a Google Account and ask for consent to share their data
-          // when establishing a new session.
-            tokenClient.requestAccessToken({prompt: 'consent'});
-            var token = gapi.client.getToken()
-            localStorage.setItem('googleToken', token)
-        } else {
-            // Skip display of account chooser and consent dialog for an existing session.
-            tokenClient.requestAccessToken({prompt: ''});
-        }
-    }
-
-      /**
-       *  Sign out the user upon button click.
-       */
-    function handleSignoutClick() {
-        var token = localStorage.getItem('googleToken');
-        if (!token) {
-            var token = gapi.client.getToken();
-            localStorage.setItem('googleToken', token)
-        }
-        if (token !== null) {
-            localStorage.removeItem('googleToken')
-            google.accounts.oauth2.revoke(token.access_token);
-            gapi.client.setToken('');
-            document.getElementById('authorize_button').innerText = '로그인';
-            document.getElementById('signout_button').style.visibility = 'hidden';
-        }
-    }
-
-      /**
-       * Print the names and majors of students in a sample spreadsheet:
-       * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-       */
-    async function listMajors(title) {
-        
-        let response;
-        try {
-          // Fetch first 10 files
-          response = await gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: SPREADSHEET_ID,
-            range: title+'!A2:C',
-          });
-        } catch (err) {
-          document.getElementById('content').innerText = err.message;
-          return;
-        }
-        const range = response.result;
-        if (!range || !range.values || range.values.length == 0) {
-          document.getElementById('content').innerText = 'No values found.';
-          return;
-        }
-        // Flatten to string to display
-        console.log(range.values)
-        const output = range.values[range.values.length - 1][2]
-        //const output = range.values.reduce(
-            // (str, row) => `${str}${row[0]}, ${row[2]}\n`,
-            // 'Name, Major:\n');
-        document.getElementById('doc-title').innerHTML = title;
-        document.getElementById('content').innerHTML = wikiParse(output);
-    }
-} else if (edit) {
-
+    /**
+     *  Sign out the user upon button click.
+     */
+function handleSignoutClick() {
     var token = localStorage.getItem('googleToken');
     if (!token) {
-        location.href = './?d='+edit
+        var token = JSON.stringify(gapi.client.getToken());
+        localStorage.setItem('googleToken', token)
     }
+    if (token !== null) {
+        localStorage.removeItem('googleToken')
+        google.accounts.oauth2.revoke(token.access_token);
+        gapi.client.setToken('');
+        document.getElementById('authorize_button').innerText = '로그인';
+        document.getElementById('signout_button').style.visibility = 'hidden';
+    }
+}
+
+function edit(range, title, input) {
+    let values = [
+      [
+        range.values.length,
+        new Date(),
+        input
+      ]
+    ];
+    const body = {
+      values: values,
+    };
+    try {
+      gapi.client.sheets.spreadsheets.values.update({
+        spreadsheetId: SPREADSHEET_ID,
+        range: title,
+        valueInputOption: valueInputOption,
+        resource: body,
+      }).then((response) => {
+        location.href="./?d="+title
+      });
+    } catch (err) {
+      document.getElementById('content').innerText += err.message;
+      return;
+    }
+  }
+
+    /**
+     * Print the names and majors of students in a sample spreadsheet:
+     * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
+     */
+async function listMajors(title) {
     
-    console.log('edit 화면')
+    let response;
+    try {
+        // Fetch first 10 files
+        response = await gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: title+'!A2:C',
+        });
+    } catch (err) {
+        document.getElementById('content').innerText = err.message;
+        return;
+    }
+    const range = response.result;
+    if (!range || !range.values || range.values.length == 0) {
+        document.getElementById('content').innerText = 'No values found.';
+        return;
+    }
+    // Flatten to string to display
+    console.log(range.values)
+    const output = range.values[range.values.length - 1][2]
+    //const output = range.values.reduce(
+        // (str, row) => `${str}${row[0]}, ${row[2]}\n`,
+        // 'Name, Major:\n');
+    document.getElementById('doc-title').innerHTML = title;
+    document.getElementById('content').innerHTML = wikiParse(output);
+
+    if (edit) {
+
+        console.log('edit 화면')
+        var token = localStorage.getItem('googleToken');
+        if (!token) {
+            location.href = './?d='+edit
+        } else {
+            gapi.client.setToken(JSON.parse(token))
+        }
+
+        document.getElementById('doc-title').innerHTML = title+' 편집';
+        document.getElementById('content').innerHTML = '<div id="post-label">'+edit+' 편집: <span id="wordcount"></span></div><input id="cw-input" placeholder="CW" ><textarea id="post-input" oninput="changePostDisabled(this)">'+output+'</textarea><button id="post-button" disabled="true" onclick="edit(range,edit,document.querySelector(`#post-input`).value)">편집 완료!</button>';
+    }
 }
