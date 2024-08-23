@@ -90,7 +90,7 @@ function gapiLoaded() {
      */
 async function initializeGapiClient() {
     // TODO(developer): Set to client ID and API key from the Developer Console
-    const API_KEY = SECRET1 + '-' + SECRET2 + '_' + SECRET3;
+    //const API_KEY = SECRET1 + '-' + SECRET2 + '_' + SECRET3;
 
     await gapi.client.init({
         apiKey: API_KEY,
