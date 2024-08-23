@@ -31,6 +31,7 @@ document.querySelector('#search-input').addEventListener("input", (e) => {
 
 function wikiParse(text) {
     text = text.replace(/\n/gm, '')
+    text = text.replace(/\[\[(.+)\|(.+)\]\]/gm, '[$1](./?d=$2)')
     text = text.replace(/\[\[(.+)\]\]/gm, '[$1](./?d=$1)')
     var markdown = marked.parse(text)
     markdown = markdown.replace(/\\n\\n/gm, '</p><p>')
