@@ -208,7 +208,6 @@ function postDocs(title) {
 }
 
 function editDocs(range, title, input) {
-    beforeUnloadAlert = false;
     input = input.replace(/\n/gm, '\\n')
     let values = [
       [
@@ -227,6 +226,7 @@ function editDocs(range, title, input) {
         valueInputOption: "RAW",
         resource: body,
       }).then((response) => {
+        window.addEventListener('beforeunload', unloadHandler);
         location.href="./?d="+title
       });
     } catch (err) {
