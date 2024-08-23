@@ -14,6 +14,15 @@ function getQueryStringObject() {
     return b;
 }
 
+function changePostDisabled(e) {
+    document.querySelector('#wordcount').innerText = e.value.length
+    if (e.value != '' ) {
+        document.querySelector('#post-button').disabled = false
+    } else {
+        document.querySelector('#post-button').disabled = true
+    }
+}
+
 var qs = getQueryStringObject()
 var docs = qs.d
 var page = qs.p
