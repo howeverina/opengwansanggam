@@ -294,6 +294,10 @@ async function renderContent(title) {
         //     document.getElementById('content').innerHTML = `<div id="post-label"><button id="post-button" onclick="postDocs('${title}')">문서 생성!</button>`;
         // } else {
             document.getElementById('content').innerText = '문서 생성 권한이 없습니다.';
+            if (localStorage.getItem('googleToken')) {
+                localStorage.removeItem('googleToken')
+                location.href='./?d='+title
+            }
             return;
         // }
     }

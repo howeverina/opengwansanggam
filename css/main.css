@@ -19,12 +19,15 @@
 body {
     font-family: 'NanumSquareNeo';
     margin: 0;
+    font-size: 14px;
 }
 
 input {
     padding: 0.3em;
     border-radius: 10px;
     border: 0;
+    padding: 5px;
+    font-family: 'NanumSquareNeo';
 }
 
 i {
