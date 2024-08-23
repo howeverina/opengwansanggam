@@ -59,8 +59,6 @@ function wikiParse(text) {
     /* exported handleAuthClick */
     /* exported handleSignoutClick */
 
-    // TODO(developer): Set to client ID and API key from the Developer Console
-const API_KEY = SECRET1 + '-' + SECRET2 + '_' + SECRET3;
 
     // Discovery doc URL for APIs used by the quickstart
 const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
@@ -91,6 +89,9 @@ function gapiLoaded() {
      * discovery doc to initialize the API.
      */
 async function initializeGapiClient() {
+    // TODO(developer): Set to client ID and API key from the Developer Console
+    const API_KEY = SECRET1 + '-' + SECRET2 + '_' + SECRET3;
+
     await gapi.client.init({
         apiKey: API_KEY,
         discoveryDocs: [DISCOVERY_DOC],
