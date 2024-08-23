@@ -112,12 +112,6 @@ function gisLoaded() {
         scope: SCOPES,
         callback: 'https://wiki.rongo.moe/', // defined later
     });
-    
-    var token = localStorage.getItem('googleToken');
-    if (token) {
-        gapi.client.setToken(JSON.parse(token))
-    }
-    
     gisInited = true;
     maybeEnableButtons();
 }
@@ -243,6 +237,11 @@ function editDocs(range, title, input) {
      */
 async function listMajors(title) {
 
+    var token = localStorage.getItem('googleToken');
+    if (token) {
+        gapi.client.setToken(JSON.parse(token))
+    }
+    
     let response;
     try {
         // Fetch first 10 files
