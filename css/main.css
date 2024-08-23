@@ -76,7 +76,7 @@ img {
     align-items: center;
 }
 
-#member-info {
+#member-info, #search {
     display: flex;
     gap: 12px;
     align-items: center;
