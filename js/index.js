@@ -1,5 +1,33 @@
 const SECRET2 = 'y4hyRoJ'
 
+function getQueryStringObject() {
+    var a = window.location.search.substr(1).split('&');
+    if (a == "") return {};
+    var b = {};
+    for (var i = 0; i < a.length; ++i) {
+        var p = a[i].split('=', 2);
+        if (p.length == 1)
+            b[p[0]] = "";
+        else
+            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+    }
+    return b;
+}
+
+var qs = getQueryStringObject()
+var document = qs.d
+var page = qs.p
+
+if (document = '') {
+    document = '시트1'
+}
+
+function wikiParse(text) {
+    text.replace(/\[\[(.+)\]\]/gm, '[$1](./?d=$1)')
+    var markdown = marked.parse(text)
+    return markdown
+}
+
 /* exported gapiLoaded */
       /* exported gisLoaded */
       /* exported handleAuthClick */
@@ -41,7 +69,7 @@ const SECRET2 = 'y4hyRoJ'
         });
         gapiInited = true;
         maybeEnableButtons();
-        listMajors('시트1')
+        listMajors(document)
       }
 
       /**
@@ -77,7 +105,7 @@ const SECRET2 = 'y4hyRoJ'
           }
           document.getElementById('signout_button').style.visibility = 'visible';
           document.getElementById('authorize_button').innerText = 'Refresh';
-          await listMajors('시트1');
+          await listMajors(document);
         };
 
         if (gapi.client.getToken() === null) {
@@ -133,5 +161,5 @@ const SECRET2 = 'y4hyRoJ'
             // (str, row) => `${str}${row[0]}, ${row[2]}\n`,
             // 'Name, Major:\n');
         document.getElementById('doc-title').innerHTML = title;
-        document.getElementById('content').innerHTML = marked.parse(output);
+        document.getElementById('content').innerHTML = wikiParse(output);
       }
