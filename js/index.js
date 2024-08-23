@@ -116,11 +116,13 @@ function gisLoaded() {
     maybeEnableButtons();
 
     var token
-    if (gapi.client.getToken() == null) {
-        if (localStorage.getItem('googleToken')) {
-            token = localStorage.getItem('googleToken');
-            if (token) {
-                gapi.client.setToken(JSON.parse(token))
+    if (!gapi.client) {
+        if (gapi.client.getToken() == null) {
+            if (localStorage.getItem('googleToken')) {
+                token = localStorage.getItem('googleToken');
+                if (token) {
+                    gapi.client.setToken(JSON.parse(token))
+                }
             }
         }
     }
