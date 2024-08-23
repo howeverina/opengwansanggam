@@ -304,11 +304,11 @@ async function renderContent(title) {
             range: title+'!A2:C',
         });
     } catch (err) {
-        response_err = await err
+        console.log(err)
         return;
     }
 
-    if (response_err) {
+    if (!response) {
         try {
             response2 = await gapi.client.sheets.spreadsheets.values.get({
                 spreadsheetId: SPREADSHEET_ID,
