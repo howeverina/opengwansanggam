@@ -240,14 +240,7 @@ function editDocs(range, title, input) {
      * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
      */
 async function listMajors(title) {
-
-    var token = localStorage.getItem('googleToken');
-    if (!token) {
-        location.href = './?d='+edit
-    } else {
-        gapi.client.setToken(JSON.parse(token))
-    }
-
+    
     let response;
     try {
         // Fetch first 10 files
