@@ -48,8 +48,8 @@ function wikiParse(text) {
     text = text.replace(/\n/gm, '')
     text = text.replace(/\[\[(.+)\|(.+)\]\]/gm, '[$1](./?d=$2)')
     text = text.replace(/\[\[(.+)\]\]/gm, '[$1](./?d=$1)')
-    markdown = markdown.replace(/\\n\\n/gm, '\n\n')
-    markdown = markdown.replace(/\\n/gm, '\n')
+    text = text.replace(/\\n\\n/gm, '</p><p>')
+    text = text.replace(/\\n/gm, '<br>')
     var markdown = marked.parse(text)
     return markdown
 }
