@@ -37,6 +37,13 @@ if (!docs && !edit) {
     title = edit
 }
 
+var token = localStorage.getItem('googleToken');
+if (!token) {
+    location.href = './?d='+edit
+} else {
+    gapi.client.setToken(JSON.parse(token))
+}
+
 document.querySelector('#logo').innerHTML = WIKI_TITLE
 const SECRET3 = 'Jkjn4rM'
 
@@ -113,6 +120,9 @@ function gisLoaded() {
     maybeEnableButtons();
 }
 
+function handleEditClick() {
+    location.href="./?ed="+title
+}
     /**
      * Enables user interaction after all libraries are loaded.
      */
@@ -130,6 +140,7 @@ function handleAuthClick() {
         if (resp.error !== undefined) {
             throw (resp);
         }
+        document.getElementById('edit_button').style.visibility = 'visible';
         document.getElementById('signout_button').style.visibility = 'visible';
         document.getElementById('authorize_button').innerText = '새로고침';
 
@@ -165,11 +176,13 @@ function handleSignoutClick() {
         google.accounts.oauth2.revoke(token.access_token);
         gapi.client.setToken('');
         document.getElementById('authorize_button').innerText = '로그인';
+        document.getElementById('edit_button').style.visibility = 'hidden';
         document.getElementById('signout_button').style.visibility = 'hidden';
     }
 }
 
 function editDocs(range, title, input) {
+    input = input.replace(/\n/gm, '\\n')
     let values = [
       [
         range,
@@ -200,12 +213,6 @@ function editDocs(range, title, input) {
      * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
      */
 async function listMajors(title) {
-    var token = localStorage.getItem('googleToken');
-    if (!token) {
-        location.href = './?d='+edit
-    } else {
-        gapi.client.setToken(JSON.parse(token))
-    }
     
     let response;
     try {
