@@ -326,14 +326,18 @@ async function renderContent(title) {
                 document.getElementById('content').innerText = '문서 생성 권한이 없습니다.';
             }
         } catch (err2) {
+            console.log(err2)
+            return;
+        }
+
+        if (!response2) {
             document.getElementById('content').innerText = '토큰 생성 1시간이 경과하여 로그아웃되었습니다.';
             if (localStorage.getItem('googleToken')) {
                 localStorage.removeItem('googleToken')
             }
-            return;
-        }
+        }    
     }
-
+    
     const range = response.result;
     if (!range || !range.values || range.values.length == 0) {
         document.getElementById('content').innerText = 'No values found.';
