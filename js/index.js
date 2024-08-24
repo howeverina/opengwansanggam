@@ -374,11 +374,22 @@ async function renderContent(title) {
                 document.getElementById('content').innerText = '문서 생성 권한이 없습니다.';
             }
         } catch (err2) {
-            document.getElementById('content').innerText = '토큰 생성 1시간이 경과하여 로그아웃되었습니다.';
-            if (localStorage.getItem('googleToken')) {
-                localStorage.removeItem('googleToken')
+            try {
+                if (localStorage.getItem('googleToken')) {
+                    if (confirm("대문 문서를 생성하시겠습니까?") == true) {
+                        tokenDelivery()
+                        postDocs('대문')
+                    } else {
+                        document.getElementById('content').innerText = "문서 생성을 취소하였습니다.";
+                    }
+                }
+            } catch (err3) {
+                document.getElementById('content').innerText = '문서 생성 권한이 없습니다.';
+                if (localStorage.getItem('googleToken')) {
+                    localStorage.removeItem('googleToken')
+                }
+                return;
             }
-            return;
         }
         return;
     }
