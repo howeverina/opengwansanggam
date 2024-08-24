@@ -1,4 +1,4 @@
-const SECRET2 = 'y4hyRoJ'
+const SECRET2 = '-y4hyRoJ_'
 
 function getQueryStringObject() {
     var a = window.location.search.substr(1).split('&');
@@ -113,7 +113,7 @@ function gapiLoaded() {
 
 async function initializeGapiClient() {
     // TODO(developer): Set to client ID and API key from the Developer Console
-    const API_KEY = SECRET1 + '-' + SECRET2 + '_' + SECRET3;
+    const API_KEY = SECRET1 + SECRET2 + SECRET3;
 
     await gapi.client.init({
         apiKey: API_KEY,
@@ -289,7 +289,7 @@ async function loginForEditing(title, length, output='') {
     if (!localStorage.getItem('googleToken')) {
         location.href = './?d='+edit
     } 
-    
+
     document.getElementById('doc-title').innerHTML = title+' 편집';
     document.getElementById('content').innerHTML = '<div id="post-label">'+edit+' 편집: <span id="wordcount"></span></div><textarea id="post-input" oninput="changePostDisabled(this)">'+output.replace(/\\n/gm, '&#010;')+`</textarea><button id="post-button" disabled="true" onclick="editDocs(${JSON.stringify(length)},'${edit}',document.querySelector('#post-input').value)">편집 완료!</button><div id="post-preview"></div>`;
     

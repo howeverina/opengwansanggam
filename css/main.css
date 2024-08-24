@@ -15,6 +15,7 @@
 :root {
     --accent: #3e8d3e;
     --bg: #f8f8f8;
+    line-height: 1.6rem;
 }
 
 body {
@@ -38,6 +39,10 @@ p {
     line-height: 1.6rem;
 }
 
+li {
+    line-height: 1.6rem;
+}
+
 i {
     font-size: 1.6rem;
 }
@@ -57,6 +62,16 @@ table {
 
 td {
     padding: 5px;
+}
+
+pre {
+    overflow-x: scroll;
+}
+
+code, pre {
+    padding: 5px;
+    border-radius: 10px;
+    background-color: var(--bg);
 }
 
 button {
