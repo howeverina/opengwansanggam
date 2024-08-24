@@ -285,11 +285,11 @@ function editDocs(range, title, input) {
     }
   }
 
-async function loginForEditing(title, length, output) {
+async function loginForEditing(title, length, output='') {
     if (!localStorage.getItem('googleToken')) {
         location.href = './?d='+edit
     } 
-
+    
     document.getElementById('doc-title').innerHTML = title+' 편집';
     document.getElementById('content').innerHTML = '<div id="post-label">'+edit+' 편집: <span id="wordcount"></span></div><textarea id="post-input" oninput="changePostDisabled(this)">'+output.replace(/\\n/gm, '&#010;')+`</textarea><button id="post-button" disabled="true" onclick="editDocs(${JSON.stringify(length)},'${edit}',document.querySelector('#post-input').value)">편집 완료!</button><div id="post-preview"></div>`;
     
