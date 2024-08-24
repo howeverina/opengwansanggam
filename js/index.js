@@ -39,6 +39,10 @@ document.querySelector('#search-input').addEventListener("input", (e) => {
 })
 
 async function wikiParse(text) {
+    if (text == '') {
+        return text
+    }
+    
     text = text.replace(/\\n\\n/gm, '\n\n')
     text = text.replace(/\\n/gm, '\n')
     var markdown = marked.parse(text)
@@ -81,7 +85,6 @@ function simpleParse(text) {
     return markdown
 }
 
-
 function changePostDisabled(e) {
     document.querySelector('#wordcount').innerText = e.value.length
     document.querySelector('#post-preview').innerHTML = simpleParse(e.value)
@@ -91,12 +94,6 @@ function changePostDisabled(e) {
         document.querySelector('#post-button').disabled = true
     }
 }
-
-/* exported gapiLoaded */
-    /* exported gisLoaded */
-    /* exported handleAuthClick */
-    /* exported handleSignoutClick */
-
 
     // Discovery doc URL for APIs used by the quickstart
 const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
@@ -109,21 +106,11 @@ const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4'
     let gapiInited = false;
     let gisInited = false;
 
-    // document.getElementById('authorize_button').style.display = 'none';
-    // document.getElementById('signout_button').style.display = 'none';
 
-    /**
-     * Callback after api.js is loaded.
-     */
 function gapiLoaded() {
     gapi.load('client', initializeGapiClient);
-
 }
 
-    /**
-     * Callback after the API client is loaded. Loads the
-     * discovery doc to initialize the API.
-     */
 async function initializeGapiClient() {
     // TODO(developer): Set to client ID and API key from the Developer Console
     const API_KEY = SECRET1 + '-' + SECRET2 + '_' + SECRET3;
