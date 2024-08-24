@@ -297,26 +297,19 @@ async function renderContent(title) {
 
     let response;
     let response_err
-    let response2
     try {
         response = await gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
             range: title+'!A2:C',
         });
     } catch (err) {
-        console.log(err)
-    }
-
-    console.log(response)
-
-    if (!response) {
         try {
-            response2 = await gapi.client.sheets.spreadsheets.values.get({
+            response_err = await gapi.client.sheets.spreadsheets.values.get({
                 spreadsheetId: SPREADSHEET_ID,
                 range: '대문!A2:C',
             });
-            console.log(response2.result)
-            if (response2.result && localStorage.getItem('googleToken')) {
+            console.log(response_err)
+            if (response_err.result && localStorage.getItem('googleToken')) {
                 if (confirm("새 문서를 생성하시겠습니까?") == true) {
                     postDocs(title)
                 } else {
@@ -326,15 +319,14 @@ async function renderContent(title) {
                 document.getElementById('content').innerText = '문서 생성 권한이 없습니다.';
             }
         } catch (err2) {
-            console.log(err2)
             document.getElementById('content').innerText = '토큰 생성 1시간이 경과하여 로그아웃되었습니다.';
             if (localStorage.getItem('googleToken')) {
                 localStorage.removeItem('googleToken')
             }
             return;
         }
+        return;
     }
-    
     const range = response.result;
     if (!range || !range.values || range.values.length == 0) {
         document.getElementById('content').innerText = 'No values found.';
