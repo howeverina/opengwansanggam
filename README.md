@@ -6,5 +6,5 @@
 
 **주의사항:** 
 * 셋팅 단계가 매우 많고 복잡합니다.
-* 현재 버전은 취약한 버전이기 때문에, 이후 **Node 버전으로의 업그레이드** 가 나올 때까지 기다리시는 것을 추천드려요.
+* 현재 버전은 취약한 버전이기 때문에, 이후 **Node 버전으로의 업그레이드** 가 나올 때까지 기다리시는 것을 추천드려요. / English version will be available when the project is fully migrated to Node.js!
 * 꼭 잘 아는 지인끼리만 사용해 주세요.
