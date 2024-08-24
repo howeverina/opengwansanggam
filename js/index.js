@@ -317,6 +317,42 @@ async function loginForEditing(title, length, output) {
 }
 
 async function renderContent(title) {
+    var token
+    if (gapi.client) {
+        if (gapi.client.getToken() == null) {
+            if (localStorage.getItem('googleToken')) {
+                token = localStorage.getItem('googleToken');
+                if (token) {
+                    gapi.client.setToken(JSON.parse(token))
+                    document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice" onclick="handleSignoutClick()" ></i>'
+                    // document.getElementById('signout_button').style.display = 'inline';
+                    document.getElementById('edit_button').style.display = 'inline';
+                    // document.getElementById('authorize_button').innerText = '새로고침';
+                }
+            } else {
+                document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-x" onclick="handleAuthClick()" ></i>'
+                // document.getElementById('authorize_button').innerText = '로그인';
+                document.getElementById('edit_button').style.display = 'none';
+                // document.getElementById('signout_button').style.display = 'none';
+            }
+        } else {
+            document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice" onclick="handleSignoutClick()" ></i>'
+            // document.getElementById('signout_button').style.display = 'inline';
+            document.getElementById('edit_button').style.display = 'inline';
+            // document.getElementById('authorize_button').innerText = '새로고침';
+        }
+    } else {
+        if (localStorage.getItem('googleToken')) {
+            token = localStorage.getItem('googleToken');
+            if (token) {
+                gapi.client.setToken(JSON.parse(token))
+                    document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice" onclick="handleSignoutClick()" ></i>'
+                    // document.getElementById('edit_button').style.display = 'inline';
+                    document.getElementById('signout_button').style.display = 'inline';
+                    // document.getElementById('authorize_button').innerText = '새로고침';
+            }
+        }
+    }
 
     let response;
     let response_err
@@ -380,43 +416,6 @@ async function renderContent(title) {
         document.getElementById('doc-title').innerHTML = title;
         document.getElementById('content').innerHTML = '<p style="font-size:0.8rem;">마지막 수정: ' + range.values[range.values.length - 1][1] + '</p>'
         document.getElementById('content').innerHTML += await wikiParse(output);
-    }
-
-    var token
-    if (gapi.client) {
-        if (gapi.client.getToken() == null) {
-            if (localStorage.getItem('googleToken')) {
-                token = localStorage.getItem('googleToken');
-                if (token) {
-                    gapi.client.setToken(JSON.parse(token))
-                    document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice" onclick="handleSignoutClick()" ></i>'
-                    // document.getElementById('signout_button').style.display = 'inline';
-                    document.getElementById('edit_button').style.display = 'inline';
-                    // document.getElementById('authorize_button').innerText = '새로고침';
-                }
-            } else {
-                document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-x" onclick="handleAuthClick()" ></i>'
-                // document.getElementById('authorize_button').innerText = '로그인';
-                document.getElementById('edit_button').style.display = 'none';
-                // document.getElementById('signout_button').style.display = 'none';
-            }
-        } else {
-            document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice" onclick="handleSignoutClick()" ></i>'
-            // document.getElementById('signout_button').style.display = 'inline';
-            document.getElementById('edit_button').style.display = 'inline';
-            // document.getElementById('authorize_button').innerText = '새로고침';
-        }
-    } else {
-        if (localStorage.getItem('googleToken')) {
-            token = localStorage.getItem('googleToken');
-            if (token) {
-                gapi.client.setToken(JSON.parse(token))
-                    document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice" onclick="handleSignoutClick()" ></i>'
-                    // document.getElementById('edit_button').style.display = 'inline';
-                    document.getElementById('signout_button').style.display = 'inline';
-                    // document.getElementById('authorize_button').innerText = '새로고침';
-            }
-        }
     }
 
 }
