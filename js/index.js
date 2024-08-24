@@ -315,7 +315,7 @@ async function loginForEditing(title, length, output) {
     });
 }
 
-async function renderContent(title) {
+function tokenDelivery() {
     var token
     if (gapi.client) {
         if (gapi.client.getToken() == null) {
@@ -352,6 +352,9 @@ async function renderContent(title) {
             }
         }
     }
+}
+
+async function renderContent(title) {
 
     let response;
     let response_err
@@ -369,6 +372,7 @@ async function renderContent(title) {
             console.log(response_err)
             if (response_err.result && localStorage.getItem('googleToken')) {
                 if (confirm("새 문서를 생성하시겠습니까?") == true) {
+                    tokenDelivery()
                     postDocs(title)
                 } else {
                     document.getElementById('content').innerText = "문서 생성을 취소하였습니다.";
@@ -417,4 +421,5 @@ async function renderContent(title) {
         document.getElementById('content').innerHTML += await wikiParse(output);
     }
 
+    tokenDelivery()
 }
