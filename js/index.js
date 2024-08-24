@@ -240,7 +240,6 @@ function postDocs(title) {
         spreadsheetId: SPREADSHEET_ID,
         resource: body,
       }).then((response) => {
-        input = input.replace(/\n/gm, '\\n')
         let values = [
           [
             'uid',
