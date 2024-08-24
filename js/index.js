@@ -39,8 +39,8 @@ document.querySelector('#search-input').addEventListener("input", (e) => {
 })
 
 async function wikiParse(text) {
-    if (text == '') {
-        return text
+    if (!text) {
+        return ''
     } else {
         text = text.replace(/\\n\\n/gm, '\n\n')
         text = text.replace(/\\n/gm, '\n')
