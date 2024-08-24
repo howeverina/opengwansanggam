@@ -316,7 +316,7 @@ async function renderContent(title) {
                 range: '대문!A2:C',
             });
             console.log(response2.result)
-            if (response2.result && localStorage.getitem('googleToken')) {
+            if (response2.result && localStorage.getItem('googleToken')) {
                 if (confirm("새 문서를 생성하시겠습니까?") == true) {
                     postDocs(title)
                 } else {
@@ -327,15 +327,12 @@ async function renderContent(title) {
             }
         } catch (err2) {
             console.log(err2)
-            return;
-        }
-
-        if (!response2) {
             document.getElementById('content').innerText = '토큰 생성 1시간이 경과하여 로그아웃되었습니다.';
             if (localStorage.getItem('googleToken')) {
                 localStorage.removeItem('googleToken')
             }
-        }    
+            return;
+        }
     }
     
     const range = response.result;
