@@ -38,6 +38,12 @@ document.querySelector('#search-input').addEventListener("input", (e) => {
     document.querySelector('#search-button').href= "./?d="+document.querySelector('#search-input').value
 })
 
+document.querySelector('#search-input').addEventListener("keyup", (e) => {
+    if (e.keyCode == 13) {
+        location.href= "./?d="+document.querySelector('#search-input').value
+    }
+})
+
 async function wikiParse(text) {
     if (!text) {
         return ''
