@@ -240,7 +240,30 @@ function postDocs(title) {
         spreadsheetId: SPREADSHEET_ID,
         resource: body,
       }).then((response) => {
-        location.href="./?d="+title
+        input = input.replace(/\n/gm, '\\n')
+        let values = [
+          [
+            'uid',
+            'created_at',
+            'body'
+          ]
+        ];
+        const body = {
+          values: values,
+        };
+        try {
+          gapi.client.sheets.spreadsheets.values.append({
+            spreadsheetId: SPREADSHEET_ID,
+            range: title,
+            valueInputOption: "RAW",
+            resource: body,
+          }).then((response2) => {
+            editDocs(0, title, '')
+          });
+        } catch (err) {
+            document.getElementById('content').innerText += err.message;
+            return;
+        }
       });
     } catch (err) {
       document.getElementById('content').innerText += err.message;
