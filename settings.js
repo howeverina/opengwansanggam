@@ -1,7 +1,7 @@
-const WIKI_TITLE = "샘플 위키" //img src 오케이!
+const WIKI_TITLE = "오픈관상감" //img src 오케이!
 
-const CLIENT_ID = "876385603351-6dho403hu41litd5us9bedkjed165g4f.apps.googleusercontent.com"
+const CLIENT_ID = "254152159309-3dggrn81oajaihq3l3unse1sjfppe5o6.apps.googleusercontent.com"
 
 const SECRET1 = "AIzaSyDPKDH3"
 
-const SPREADSHEET_ID = "1iuIYp3-CKgSL1nGw3cODvomShDGNmNWN2xg6Wtho9Hg"
+const SPREADSHEET_ID = "18pPJy6uSpcHn4Mmb8nOxRdgL71j6UVgsnVhJJi_8xU0"
