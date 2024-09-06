@@ -148,3 +148,9 @@ img {
     gap: 5px;
     margin-bottom: 40px;
 }
+
+blockquote {
+    margin: 0;
+    padding: 1em 0 1em 2em;
+    border-left: var(--accent) 2px solid;
+}
