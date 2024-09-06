@@ -132,9 +132,6 @@ async function initializeGapiClient() {
     renderContent(title)
 }
 
-    /**
-     * Callback after Google Identity Services are loaded.
-     */
 function gisLoaded() {
     tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: CLIENT_ID,
@@ -155,31 +152,18 @@ function handleEditClick() {
 function handleHistoryClick() {
     location.href="./?d="+title+"&v=list"
 }
-    /**
-     * Enables user interaction after all libraries are loaded.
-     */
-// function maybeEnableButtons() {
 
-//     if (gapiInited && gisInited) {
-//         document.getElementById('authorize_button').style.display = 'inline';
-//     }
-// }
-
-    /**
-     *  Sign in the user upon button click.
-     */
 function handleAuthClick() {
 
     tokenClient.callback = async (resp) => {
         if (resp.error !== undefined) {
             throw (resp);
         }
-        // document.getElementById('edit_button').style.display = 'inline';
-        // document.getElementById('signout_button').style.display = 'inline';
-        // document.getElementById('authorize_button').innerText = '새로고침';
-
         var token = JSON.stringify(gapi.client.getToken())
+        var tokenExpireDate = new Date()
+        tokenExpireDate.setHours(tokenExpireDate.getHours() + 1);
         localStorage.setItem('googleToken', token)
+        localStorage.setItem('tokenExpireDate', tokenExpireDate)
 
         await renderContent(title);
     };
@@ -189,7 +173,10 @@ function handleAuthClick() {
         // when establishing a new session.
         tokenClient.requestAccessToken({prompt: 'consent'});
         var token = JSON.stringify(gapi.client.getToken())
+        var tokenExpireDate = new Date()
+        tokenExpireDate.setHours(tokenExpireDate.getHours() + 1);
         localStorage.setItem('googleToken', token)
+        localStorage.setItem('tokenExpireDate', tokenExpireDate)
     } else {
         // Skip display of account chooser and consent dialog for an existing session.
         tokenClient.requestAccessToken({prompt: ''});
@@ -208,6 +195,7 @@ function handleSignoutClick() {
     }
     if (token !== null) {
         localStorage.removeItem('googleToken')
+        localStorage.removeItem('tokenExpireDate')
         google.accounts.oauth2.revoke(token.access_token);
         gapi.client.setToken('');
         // document.getElementById('authorize_button').innerText = '로그인';
@@ -314,34 +302,38 @@ function tokenDelivery() {
         if (gapi.client.getToken() == null) {
             if (localStorage.getItem('googleToken')) {
                 token = localStorage.getItem('googleToken');
-                if (token) {
+                if (token && Date.parse(localStorage.getItem('tokenExpireDate')) > new Date()) {
                     gapi.client.setToken(JSON.parse(token))
                     document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice" onclick="handleSignoutClick()" ></i>'
                     // document.getElementById('signout_button').style.display = 'inline';
                     document.getElementById('edit_button').style.display = 'inline';
                     // document.getElementById('authorize_button').innerText = '새로고침';
+                } else {
+                    localStorage.removeItem('googleToken')
+                    localStorage.removeItem('tokenExpireDate')
+                    document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-x" onclick="handleAuthClick()" ></i>'
+                    document.getElementById('edit_button').style.display = 'none';
                 }
             } else {
                 document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-x" onclick="handleAuthClick()" ></i>'
-                // document.getElementById('authorize_button').innerText = '로그인';
                 document.getElementById('edit_button').style.display = 'none';
-                // document.getElementById('signout_button').style.display = 'none';
             }
         } else {
             document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice" onclick="handleSignoutClick()" ></i>'
-            // document.getElementById('signout_button').style.display = 'inline';
             document.getElementById('edit_button').style.display = 'inline';
-            // document.getElementById('authorize_button').innerText = '새로고침';
         }
     } else {
         if (localStorage.getItem('googleToken')) {
             token = localStorage.getItem('googleToken');
-            if (token) {
+            if (token && Date.parse(localStorage.getItem('tokenExpireDate')) > new Date()) {
                 gapi.client.setToken(JSON.parse(token))
                     document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-voice" onclick="handleSignoutClick()" ></i>'
-                    // document.getElementById('edit_button').style.display = 'inline';
                     document.getElementById('signout_button').style.display = 'inline';
-                    // document.getElementById('authorize_button').innerText = '새로고침';
+            } else {
+                localStorage.removeItem('googleToken')
+                localStorage.removeItem('tokenExpireDate')
+                document.querySelector('#isLogin').innerHTML = '<i class="bx bx-user-x" onclick="handleAuthClick()" ></i>'
+                document.getElementById('edit_button').style.display = 'none';
             }
         }
     }
@@ -387,6 +379,7 @@ async function renderContent(title) {
                 document.getElementById('content').innerText = '문서 생성 권한이 없습니다.';
                 if (localStorage.getItem('googleToken')) {
                     localStorage.removeItem('googleToken')
+                    localStorage.removeItem('tokenExpireDate')
                 }
                 return;
             }
